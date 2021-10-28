@@ -1,6 +1,6 @@
 Package: ldc
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Calculate and Plot Pollutant Load Duration Curves
 Version: 0.1.0
 Authors@R: c(person("Michael", "Schramm", 
                     role = c("aut", "cre"), 
@@ -9,8 +9,10 @@ Authors@R: c(person("Michael", "Schramm",
              person("Texas Water Resources Institute",
                      role = "cph"))
 Maintainer: Michael Schramm <mpschramm@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Load duration curves are a method for visualizing pollutant
+    loads in freshwater streams based on the assumed relationship between
+    streamflow and load. Functions are provided for calculating exceedance
+    probabilities, pollutant loading, and plotting load duration curves.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

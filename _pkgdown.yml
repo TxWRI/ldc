@@ -1,0 +1,6 @@
+url: https://txwri.github.io/ldc/
+template:
+  params:
+    bootswatch: yeti
+repo:
+  branch: gh-pages
