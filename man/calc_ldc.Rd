@@ -14,21 +14,43 @@ calc_ldc(
 )
 }
 \arguments{
-\item{.tbl}{data frame with at least two columns Q (discharge or flow) and C (associated pollutant concentration).}
+\item{.tbl}{data frame with at least two columns Q (discharge or flow) and C
+(associated pollutant concentration).}
 
-\item{Q}{variable name in .tbl for discharge or flow. This must have unit set, typically "ft^3/s".}
+\item{Q}{variable name in .tbl for discharge or flow. This must have unit
+set, typically "ft^3/s".}
 
-\item{C}{variable name in .tbl for associated pollutant concentration at a given flow value. This must have a unit set, typically "mg/L" or "cfu/100mL".}
+\item{C}{variable name in .tbl for associated pollutant concentration at a
+given flow value. This must have a unit set, typically "mg/L" or
+"cfu/100mL".}
 
-\item{allowable_concentration}{an object of class \code{units} specifying the allowable pollutant concentration.}
+\item{allowable_concentration}{an object of class \code{units} specifying the
+allowable pollutant concentration.}
 
-\item{breaks}{a numeric vector of break points for flow categories. Must be of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.}
+\item{breaks}{a numeric vector of break points for flow categories. Must be
+of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.}
 
 \item{labels}{labels for the categories specified by breaks.}
 }
 \value{
-object of class tibble.
+object of class tibble. Includes variables in .tbl and
+  Daily_Flow_Volume (discharge volume), Daily_Load (pollutant sample volume),
+  P_Exceedance (exeedance probability), Flow_Category (as defined by breaks
+  and labels).
 }
 \description{
-Calculates the daily load duration curve from a data frame that includes mean daily flow and associated point measurements of pollutant concentration.
+Calculates the daily load duration curve from a data frame that includes mean
+daily flow and associated point measurements of pollutant concentration.
+}
+\examples{
+# Basic example using built in Tres Palacios data
+library(dplyr)
+library(units)
+install_unit("cfu")
+as_tibble(tres_palacios) \%>\%
+  ## flow must have units, here is is in cfs
+  mutate(Flow = set_units(Flow, "ft^3/s")) \%>\%
+  ## pollutant concentration must have units
+  mutate(Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
+
 }
