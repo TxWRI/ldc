@@ -1,0 +1,73 @@
+#' Calculate load duration curve
+#'
+#' Calculates the daily load duration curve from a data frame that includes mean daily flow and associated point measurements of pollutant concentration.
+#'
+#' @param .tbl data frame with at least two columns Q (discharge or flow) and C (associated pollutant concentration).
+#' @param Q variable name in .tbl for discharge or flow. This must have unit set, typically "ft^3/s".
+#' @param C variable name in .tbl for associated pollutant concentration at a given flow value. This must have a unit set, typically "mg/L" or "cfu/100mL".
+#' @param allowable_concentration an object of class \code{units} specifying the allowable pollutant concentration.
+#' @param breaks a numeric vector of break points for flow categories. Must be of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.
+#' @param labels labels for the categories specified by breaks.
+#'
+#' @return object of class tibble.
+#' @import rlang dplyr units
+#' @importFrom stats median
+#' @export
+#'
+calc_ldc <- function(.tbl,
+                     Q = NULL,
+                     C = NULL,
+                     allowable_concentration = NULL,
+                     breaks = c(1, 0.8, 0.4, 0),
+                     labels = c("High Flows", "Medium Flows", "Low Flows")) {
+
+  #Q_col <- substitute(Q)
+
+  class(.tbl[[substitute(Q)]])
+
+  ## check that Q and C have units
+  if (class(.tbl[[substitute(Q)]]) != "units") {
+    stop(paste0(as_name(enquo(Q)),
+                " does not have units"))
+  }
+  if (class(.tbl[[substitute(C)]]) != "units") {
+    stop(paste0(as_name(enquo(C)),
+                " does not have units"))
+  }
+  if (class(allowable_concentration) != "units") {
+    stop("'allowable_concentration' does not have units")
+  }
+
+  ## get concentration denominator
+  C_den <- units(.tbl[[substitute(C)]])$denominator
+
+  ## if length is zero, then it is not a concentration
+  if(length(C_den) == 0) {
+    stop(paste0(as_name(enquo(C)),
+                " does not have valid units, it is missing a denominator"))
+  }
+
+  ## daily volume units based on concentration
+  fv_units <- as_units(paste0(C_den, "/day"))
+
+  .tbl %>%
+    as_tibble(.tbl) %>%
+    mutate(
+      ## daily flow in units of the concentration denominator
+      Daily_Flow_Volume = set_units(!! enquo(Q),
+                                         fv_units,
+                                         mode = "standard"),
+      ## daily measured load
+      Daily_Load = .data$Daily_Flow_Volume * !! enquo(C),
+      ## daily allowable load
+      Allowable_Daily_Load = .data$Daily_Flow_Volume * allowable_concentration,
+      ## proportion of days flow exceeded
+      P_Exceedance = 1 - cume_dist(!! enquo(Q)),
+      ## bin the flow exceedance values
+      Flow_Category = cut(.data$P_Exceedance, breaks = breaks, labels = labels,
+                          right = FALSE)) -> .tbl
+
+  attr(.tbl, "breaks") <- breaks
+  return(.tbl)
+
+}
