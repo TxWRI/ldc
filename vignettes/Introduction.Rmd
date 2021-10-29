@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Introduction to ldc}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
 ---
 
 ```{r, include = FALSE}
@@ -54,8 +55,8 @@ library(dplyr)
 
 ## load example data
 df <- as_tibble(tres_palacios) %>%
-  ## filter this to the last 5 years of data
-  filter(Date >= as.Date("2015-01-01"))
+  ## filter this to the last 6 years of data
+  filter(Date >= as.Date("2014-01-01"))
 
 ## show the data filtered to paired Q and C observations
 df %>% filter(!is.na(Indicator_Bacteria))
@@ -91,21 +92,21 @@ objects include the appropriate units when printed.
 
 ldc is composed of three major functions:
 
-  - `calc_ldc` takes an input dataset of matched flow and pollutant 
+  - **`calc_ldc()`** takes an input dataset of matched flow and pollutant 
   concentrations to generate a dataframe with exceedance probabilities for
   allowable pollutant loads (the LDC), measured pollutant concentrations
   converted to loads, alongside user specified flow duration intervals.
  
- - `summ_ldc` uses the output from `calc_ldc` to generate a summary dataframe
+ - **`summ_ldc()`** uses the output from `calc_ldc()` to generate a summary dataframe
  grouped by flow duration intervals.
  
- - `draw_ldc` uses the output from both functions to generate an LDC figure as 
+ - **`draw_ldc()`** uses the output from both functions to generate an LDC figure as 
  a ggplot object.
  
 
 **`calc_ldc`**
 
-The `calc_ldc` function is the first function to run. It has six arguments:
+The `calc_ldc()` function is the first function to run. It has six arguments:
 
  - .tbl is the dataframe formatted as described above.
  
@@ -145,7 +146,7 @@ df_ldc %>% filter(!is.na(Indicator_Bacteria))
 
 **`summ_ldc`**
 
-The `summ_ldc` function is the second function to run. It has six arguments:
+The `summ_ldc()` function is the second function to run. It has six arguments:
 
  - .tbl is a dataframe, preferably the output from `calc_ldc()` or formatted 
  exactly like it.
@@ -159,7 +160,7 @@ The `summ_ldc` function is the second function to run. It has six arguments:
  leave it alone.
  
  - groups is the variable name in .tbl with the flow interval names. This
- defaults to the output created by `calc_ldc` so in most cases you can leave it 
+ defaults to the output created by `calc_ldc()` so in most cases you can leave it 
  alone.
  
  - method is a string describing the method desired for summarizing pollutant
@@ -177,7 +178,7 @@ df_sum
 
 **`draw_ldc`**
 
-The final function is `draw_ldc` which uses the output from the previous two
+The final function is `draw_ldc()` which uses the output from the previous two
 functions to generate a plot as a ggplot object. There are many arguments in 
 this function, I won't describe them all but details are available using 
 `?draw_ldc`. Importantly, since the output is a ggplot object, the output can
@@ -203,3 +204,5 @@ p1 <- draw_ldc(df_ldc,
 p1
 ```
 
+
+# References
