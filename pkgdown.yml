@@ -3,7 +3,9 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   Introduction: Introduction.html
-last_built: 2021-10-29T20:56Z
+  articles/exceedance: exceedance.html
+  articles/units: units.html
+last_built: 2021-10-29T21:56Z
 urls:
   reference: https://txwri.github.io/ldc//reference
   article: https://txwri.github.io/ldc//articles
