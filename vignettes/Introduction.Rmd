@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Introduction to ldc}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
 ---
 
 ```{r, include = FALSE}
@@ -203,3 +204,5 @@ p1 <- draw_ldc(df_ldc,
 p1
 ```
 
+
+# References
