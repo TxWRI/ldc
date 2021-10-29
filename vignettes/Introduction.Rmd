@@ -1,0 +1,205 @@
+---
+title: "Introduction to ldc"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to ldc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ldc)
+```
+
+The goal of ldc is to provide functions for quickly creating pollutant
+load duration curves (LDCs). LDCs are an extension of flow duration curves 
+(FDCs). The FDC is essentially a cumulative distribution plot with observed
+streamflow values on the y-axis, and the proportion of values that exceed 
+a given flow value on the x-axis. Specifically, the FDC displays the exceedance 
+probability $p$ on the x-axis and the associated discharge ($Q$) on the y-axis
+[@vogel_flowduration_1994]. Typically, mean daily discharge is used to
+calculate the flow exceedance values. Using this approach, flows can be
+categorized into flow duration intervals such as "Flood Flows," "High Flows,"
+"Moderate Flows," and "Low Flows." 
+
+The LDC is developed by multiplying allowable pollutant concentrations by the
+daily streamflow volume to identify allowable pollutant loads across flow
+duration intervals. Measured pollutant concentrations can be added to the
+duration curve by multiplying the concentrations and streamflow volume to derive
+an instantaneous load at a given exceedance percentile. By overlaying measured
+values over the LDC line, we can develop some inference for what conditions
+pollutant concentrations and loads exceed allowable concentrations. 
+@cleland_tmdl_2003 and @morrison_development_2008 provide additional information
+for LDC development and use in pollutant loading assessments.
+
+# Input Data
+
+ldc requires a dataframe with at least two columns, discharge ($Q$) and
+measured pollutant concentrations ($C$). It is assumed, $Q$ is mean daily
+discharge, any units can be used (cfs, cms, etc.) $C$ can be any measured 
+pollutant concentration associated with the value of $Q$ on the same row. The
+package includes a dataset, `tres_palacios`, that demonstrates how this is 
+formatted.
+
+```{r importdata}
+## load required packages
+library(dplyr)
+
+## load example data
+df <- as_tibble(tres_palacios) %>%
+  ## filter this to the last 5 years of data
+  filter(Date >= as.Date("2015-01-01"))
+
+## show the data filtered to paired Q and C observations
+df %>% filter(!is.na(Indicator_Bacteria))
+
+
+```
+
+ldc also utilizes the [units](https://cran.r-project.org/package=units) package
+to handle unit conversions. Therefore, $Q$ and $C$ will need to be formatted as
+units objects before using any ldc functions. In the example below, we need to
+create a new unit, "cfu", for the Indicator_Bacteria variable and change both 
+Flow and Indicator_Bacteria to unit objects.
+
+```{r formatdata}
+## load required packages
+library(units)
+
+
+## make the cfu unit
+install_unit("cfu")
+
+## change Q and C to unit objects with appropriate units
+df <- df %>%
+  mutate(Flow = set_units(Flow, "ft^3/s"),
+         Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
+df
+```
+
+Now the dataframe is formatted for use in ldc functions. You can see the unit
+objects include the appropriate units when printed. 
+
+# Functions
+
+ldc is composed of three major functions:
+
+  - `calc_ldc` takes an input dataset of matched flow and pollutant 
+  concentrations to generate a dataframe with exceedance probabilities for
+  allowable pollutant loads (the LDC), measured pollutant concentrations
+  converted to loads, alongside user specified flow duration intervals.
+ 
+ - `summ_ldc` uses the output from `calc_ldc` to generate a summary dataframe
+ grouped by flow duration intervals.
+ 
+ - `draw_ldc` uses the output from both functions to generate an LDC figure as 
+ a ggplot object.
+ 
+
+**`calc_ldc`**
+
+The `calc_ldc` function is the first function to run. It has six arguments:
+
+ - .tbl is the dataframe formatted as described above.
+ 
+ - Q is the variable name in .tbl for discharge or flow.
+ 
+ - C is the variable name for measured pollutant concentration.
+ 
+ - allowable_concentration is an object of class units specifying the allowable
+ pollutant concentration (water quality standard). This must have the same units
+ as C.
+ 
+ - breaks is a numeric vector from (1 -> 0) that indicates the break points for
+ flow duration intervals. The length of the vector should be 1 more than the number of
+ flow duration intervals. For example, `c(1, 0.9, 0.6, 0.4, 0.1, 0)` has 6 breaks and
+ 5 flow duration intervals.
+ 
+ - labels is a vector with the names for each flow duration interval. For
+ example, `c("Highest flows", "High Flows", "Moderate Flows", "Dry Conditions", "Lowest Flows")`.
+ 
+
+```{r calcldc}
+## set the allowable concentration
+allowable_concentration <- 126
+units(allowable_concentration) <- "cfu/100mL"
+
+## calculate the ldc
+df_ldc <- calc_ldc(df,
+                   Q = Flow,
+                   C = Indicator_Bacteria,
+                   allowable_concentration = allowable_concentration,
+                   breaks = c(1, 0.9, 0.6, 0.4, 0.1, 0),
+                   labels = c("Highest flows", "High Flows", "Moderate Flows", "Dry Conditions", "Lowest Flows"))
+
+## show the result
+df_ldc %>% filter(!is.na(Indicator_Bacteria))
+```
+
+**`summ_ldc`**
+
+The `summ_ldc` function is the second function to run. It has six arguments:
+
+ - .tbl is a dataframe, preferably the output from `calc_ldc()` or formatted 
+ exactly like it.
+
+ - Q is the variable name in .tbl for discharge or flow.
+
+ - C is the variable name in .tbl for measured pollutant concentration.
+
+ - Exceedance is the variable name in .tbl for flow exceedance probabilities. 
+ This defaults to the output created by `calc_ldc()` so in most cases you can 
+ leave it alone.
+ 
+ - groups is the variable name in .tbl with the flow interval names. This
+ defaults to the output created by `calc_ldc` so in most cases you can leave it 
+ alone.
+ 
+ - method is a string describing the method desired for summarizing pollutant
+ concentration. It can be one of `"geomean"`, `"mean"`, or `"median"`. 
+ 
+```{r calcsumm}
+df_sum <- summ_ldc(df_ldc, 
+                   Q = Flow, 
+                   C = Indicator_Bacteria, 
+                   Exceedance = P_Exceedance,
+                   groups = Flow_Category,
+                   method = "geomean")
+df_sum
+```
+
+**`draw_ldc`**
+
+The final function is `draw_ldc` which uses the output from the previous two
+functions to generate a plot as a ggplot object. There are many arguments in 
+this function, I won't describe them all but details are available using 
+`?draw_ldc`. Importantly, since the output is a ggplot object, the output can
+be modified using many of the available ggplot functions.
+
+```{r draw}
+library(ggplot2)
+
+p1 <- draw_ldc(df_ldc, 
+               df_sum, 
+               y_lab = expression(paste(italic("E. coli"))),
+               ldc_legend_name = "LDC at 35cfu/100mL",
+               measurement_name = "Measured Values",
+               summary_name = "Summarized Loads (Geometric Mean)",
+               label_nudge_y = log10(1000)) + 
+  scale_y_log10() +
+  annotation_logticks(sides = "l") +
+  theme_bw() +
+  theme(legend.title = element_blank(),
+        legend.direction = "vertical",
+        legend.position = "bottom")
+
+p1
+```
+

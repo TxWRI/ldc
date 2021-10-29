@@ -27,3 +27,7 @@ Imports:
     units
 URL: https://github.com/TxWRI/ldc
 BugReports: https://github.com/TxWRI/ldc/issues
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
