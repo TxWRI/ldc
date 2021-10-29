@@ -76,7 +76,8 @@
 #'          label_nudge_y = log10(1000)) +
 #'          scale_y_log10() +
 #'          theme(legend.title = element_blank(),
-#'          legend.direction = "vertical")
+#'                legend.direction = "vertical",
+#'                legend.position = "bottom")
 #'
 #' ## cleanup
 #' remove_unit("cfu")
