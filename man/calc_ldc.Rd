@@ -46,11 +46,25 @@ daily flow and associated point measurements of pollutant concentration.
 # Basic example using built in Tres Palacios data
 library(dplyr)
 library(units)
+# Format data
 install_unit("cfu")
-as_tibble(tres_palacios) \%>\%
+df <- as_tibble(tres_palacios) \%>\%
   ## flow must have units, here is is in cfs
   mutate(Flow = set_units(Flow, "ft^3/s")) \%>\%
   ## pollutant concentration must have units
   mutate(Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
+# Calculate LDC
 
+## specify the allowable concentration
+allowable_concentration <- 126
+## set the units
+units(allowable_concentration) <- "cfu/100mL"
+df_ldc <- calc_ldc(df,
+                   Q = Flow,
+                   C = Indicator_Bacteria,
+                   allowable_concentration = allowable_concentration)
+df_ldc
+
+## cleanup
+remove_unit("cfu")
 }

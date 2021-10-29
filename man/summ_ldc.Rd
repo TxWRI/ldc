@@ -9,19 +9,65 @@ summ_ldc(.tbl, Q, C, Exceedance, groups, method = "geomean")
 \arguments{
 \item{.tbl}{data frame, prefferably the output from \code{calc_ldc()}.}
 
-\item{Q}{variable name in .tbl for discharge or flow. This must have unit set, typically "ft^3/s".}
+\item{Q}{variable name in .tbl for discharge or flow. This must have unit
+set, typically "ft^3/s".}
 
-\item{C}{variable name in .tbl for associated pollutant concentration at a given flow value. This must have a unit set, typically "mg/L" or "cfu/100mL".}
+\item{C}{variable name in .tbl for associated pollutant concentration at a
+given flow value. This must have a unit set, typically "mg/L" or
+"cfu/100mL".}
 
-\item{Exceedance}{variable name in .tbl with flow/load exceedance probabilities.}
+\item{Exceedance}{variable name in .tbl with flow/load exceedance
+probabilities.}
 
 \item{groups}{variable name in .tbl with categorized flow names.}
 
-\item{method}{string that describes the summary statistic used for the pollutant concentration. Must be one of \code{c('geomean', 'mean', 'median')}.}
+\item{method}{string that describes the summary statistic used for the
+pollutant concentration. Must be one of \code{c('geomean', 'mean',
+'median')}.}
 }
 \value{
-a data frame
+object of class tibble. Includes Flow Category grouping variable,
+  median flow and exceedance values, geometric mean/mean/median pollutant
+  concentration, and estimated average load based on median flow times the
+  average pollutant concentration per flow category.
 }
 \description{
-Summarize load duration curve
+Calculates summary statistics for flow and pollutant concentrations for
+desired flow categories. Estimates "average" pollutant load per category
+based on average concentration times the median flow.
+}
+\examples{
+# Basic example using built in Tres Palacios data
+library(dplyr)
+library(units)
+# Format data
+install_unit("cfu")
+df <- as_tibble(tres_palacios) \%>\%
+        ## flow must have units, here is is in cfs
+        mutate(Flow = set_units(Flow, "ft^3/s")) \%>\%
+        ## pollutant concentration must have units
+        mutate(Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
+# Calculate LDC
+
+## specify the allowable concentration
+allowable_concentration <- 126
+## set the units
+units(allowable_concentration) <- "cfu/100mL"
+df_ldc <- calc_ldc(df,
+                   Q = Flow,
+                   C = Indicator_Bacteria,
+                   allowable_concentration = allowable_concentration)
+
+# Summarize LDC
+df_sum <- summ_ldc(df_ldc,
+                   Q = Flow,
+                   C = Indicator_Bacteria,
+                   Exceedance = P_Exceedance,
+                   groups = Flow_Category,
+                   method = "geomean")
+df_sum
+
+## cleanup
+remove_unit("cfu")
+
 }
