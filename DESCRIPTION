@@ -25,3 +25,5 @@ Imports:
     magrittr,
     rlang,
     units
+URL: https://github.com/TxWRI/ldc
+BugReports: https://github.com/TxWRI/ldc/issues
