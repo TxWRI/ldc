@@ -44,6 +44,8 @@
 #' # Format data
 #' install_unit("cfu")
 #' df <- as_tibble(tres_palacios) %>%
+#'         ## filter data so this run quicker
+#'         filter(!is.na(Indicator_Bacteria)) %>%
 #'         ## flow must have units, here is is in cfs
 #'         mutate(Flow = set_units(Flow, "ft^3/s")) %>%
 #'         ## pollutant concentration must have units
@@ -74,7 +76,8 @@
 #'          label_nudge_y = log10(1000)) +
 #'          scale_y_log10() +
 #'          theme(legend.title = element_blank(),
-#'          legend.direction = "vertical")
+#'                legend.direction = "vertical",
+#'                legend.position = "bottom")
 #'
 #' ## cleanup
 #' remove_unit("cfu")
