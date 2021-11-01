@@ -10,7 +10,8 @@ calc_ldc(
   C = NULL,
   allowable_concentration = NULL,
   breaks = c(1, 0.8, 0.4, 0),
-  labels = c("High Flows", "Medium Flows", "Low Flows")
+  labels = c("High Flows", "Medium Flows", "Low Flows"),
+  estimator = "weibull"
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ allowable pollutant concentration.}
 of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.}
 
 \item{labels}{labels for the categories specified by breaks.}
+
+\item{estimator}{string specifying the method for calculating the proportion
+of time flows are exceeded. Must be one of \code{'weibull'} or
+\code{'ecdf'}.}
 }
 \value{
 object of class tibble. Includes variables in .tbl and
@@ -39,8 +44,9 @@ object of class tibble. Includes variables in .tbl and
   and labels).
 }
 \description{
-Calculates the daily load duration curve from a data frame that includes mean
-daily flow and associated point measurements of pollutant concentration.
+Calculates the period of record load duration curve from a data frame that
+includes mean daily flow and associated point measurements of pollutant
+concentration.
 }
 \examples{
 # Basic example using built in Tres Palacios data

@@ -1,7 +1,8 @@
 #' Calculate load duration curve
 #'
-#' Calculates the daily load duration curve from a data frame that includes mean
-#' daily flow and associated point measurements of pollutant concentration.
+#' Calculates the period of record load duration curve from a data frame that
+#' includes mean daily flow and associated point measurements of pollutant
+#' concentration.
 #'
 #' @param .tbl data frame with at least two columns Q (discharge or flow) and C
 #'   (associated pollutant concentration).
@@ -15,6 +16,9 @@
 #' @param breaks a numeric vector of break points for flow categories. Must be
 #'   of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.
 #' @param labels labels for the categories specified by breaks.
+#' @param estimator string specifying the method for calculating the proportion
+#'   of time flows are exceeded. Must be one of \code{'weibull'} or
+#'   \code{'ecdf'}.
 #'
 #' @return object of class tibble. Includes variables in .tbl and
 #'   Daily_Flow_Volume (discharge volume), Daily_Load (pollutant sample volume),
@@ -55,11 +59,26 @@ calc_ldc <- function(.tbl,
                      C = NULL,
                      allowable_concentration = NULL,
                      breaks = c(1, 0.8, 0.4, 0),
-                     labels = c("High Flows", "Medium Flows", "Low Flows")) {
+                     labels = c("High Flows", "Medium Flows", "Low Flows"),
+                     estimator = "weibull") {
 
-  #Q_col <- substitute(Q)
 
-  class(.tbl[[substitute(Q)]])
+  ## basic checks
+  if(is.null(substitute(Q))) {
+    stop(paste0("Please specify a col 'Q' from '", as_name(enquo(.tbl)),"'"))
+  }
+
+  if(is.null(substitute(C))) {
+    stop(paste0("Please specify a col 'C' from '", as_name(enquo(.tbl)), "'"))
+  }
+
+  if(is.null(allowable_concentration)) {
+    stop("'allowable_concentration' cannot be 'NULL'")
+  }
+
+  if(!(estimator %in% c("weibull", "ecdf"))) {
+    stop("'estimator' must be one of 'weibull' or 'ecdf'")
+  }
 
   ## check that Q and C have units
   if (class(.tbl[[substitute(Q)]]) != "units") {
@@ -98,12 +117,51 @@ calc_ldc <- function(.tbl,
       ## daily allowable load
       Allowable_Daily_Load = .data$Daily_Flow_Volume * allowable_concentration,
       ## proportion of days flow exceeded
-      P_Exceedance = 1 - cume_dist(!! enquo(Q)),
+      P_Exceedance = p_estimator(!! enquo(Q), estimator = estimator),
       ## bin the flow exceedance values
       Flow_Category = cut(.data$P_Exceedance, breaks = breaks, labels = labels,
                           right = FALSE)) -> .tbl
 
   attr(.tbl, "breaks") <- breaks
   return(.tbl)
+
+}
+
+
+#' Estimate exceedance probability
+#'
+#' @param Q vector of streamflow values
+#' @param estimator string, either 'weibull' or 'ecdf'
+#'
+#' @return vector of streamflow percentiles
+#' @noRd
+#' @keywords internal
+#' @importFrom stats ecdf
+p_estimator <- function(Q,
+                        estimator) {
+
+  if(estimator == "weibull") {
+    pp <- wb_pp(Q)
+  }
+
+  if(estimator == "ecdf") {
+    pp <- 1 - ecdf(Q)(Q)
+  }
+
+  return(pp)
+
+
+}
+
+wb_pp <- function(x) {
+
+  r <- rank(-x,
+            na.last = NA,
+            ties.method = "first")
+  n <- length(x)
+
+  pp <- r/(n+1)
+
+  return(pp)
 
 }

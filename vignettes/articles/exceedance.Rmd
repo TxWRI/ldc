@@ -14,4 +14,24 @@ library(ldc)
 ```
 
 
-**placeholder**
+# Flow Duration Curve Percentiles
+
+@vogel_flowduration_1994 describes the flow duration curve (FDC), from which the load duration curve (LDC) is calculated, as the complement of the cumulative distribution function of daily streamflow. For each value of discharge, the corresponding exceedance probability $p$ is calculated as 1 minus the empirical cumulative distribution function. By setting the `calc_ldc()` argument `estimator = 'ecdf'` p is calculated for observation $Q_i$ where $i = 1, 2, ... n$:
+
+$$
+p = 1 - P \{Q_i\le q_0\} \\
+where \\
+P\{Q_i>q_0\} = \frac{number\ of\ Q_i \le q_0}{number\ of\ observations} = \frac{\sum_{i=1}^n{I(Q_i \le q_0)}}{n} = \frac{1}{n}\sum_{i=1}^n I(Q_i \le q_0)
+$$
+
+This can be interpreted as the exceedance probability ($p$) of $Q_i$ is equal to one minus the ranked position of $Q_i$ divided by number of observations. 
+
+The default method for estimating $p$ is the Weibull plotting position (`estimator = 'weibull'`). The Weibull plotting position provides a unbiased estimates of $p_i$ regardless of the underlying streamflow distribution [@vogel_flowduration_1994]. The Weibull plotting position is calculated $p$ where $q_i$, $i = 1, 2, ... n$, is the $i$th sorted streamflow value:
+
+$$
+p = P(Q > q_i) =  \frac{i}{n+1}
+$$
+
+
+# Alternative Percentile Calculations
+
