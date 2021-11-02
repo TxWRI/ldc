@@ -16,14 +16,18 @@
 #' @param breaks a numeric vector of break points for flow categories. Must be
 #'   of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.
 #' @param labels labels for the categories specified by breaks.
-#' @param estimator string specifying the method for calculating the proportion
-#'   of time flows are exceeded. Must be one of \code{'weibull'} or
-#'   \code{'ecdf'}.
+#' @param estimator numeric, one of \code{c(5,6,7,8,9)}. \code{6} is the default
+#'   method correponding to the Weibull plotting position. Further details are
+#'   provided in \code{stats::quantile()}.
 #'
 #' @return object of class tibble. Includes variables in .tbl and
 #'   Daily_Flow_Volume (discharge volume), Daily_Load (pollutant sample volume),
 #'   P_Exceedance (exeedance probability), Flow_Category (as defined by breaks
 #'   and labels).
+#' @details The exceedance probability is calculated from the descending order
+#'   of Daily Flows. By default, the Weibull plotting position is used:
+#'   \deqn{p = P(Q > q_i) =  \frac{i}{n+1}}
+#'   where \eqn{q_i, i = 1, 2, ... n}, is the i-th sorted streamflow value.
 #' @import rlang dplyr units
 #' @importFrom stats median
 #' @export
@@ -60,7 +64,7 @@ calc_ldc <- function(.tbl,
                      allowable_concentration = NULL,
                      breaks = c(1, 0.8, 0.4, 0),
                      labels = c("High Flows", "Medium Flows", "Low Flows"),
-                     estimator = "weibull") {
+                     estimator = 6) {
 
 
   ## basic checks
@@ -76,8 +80,8 @@ calc_ldc <- function(.tbl,
     stop("'allowable_concentration' cannot be 'NULL'")
   }
 
-  if(!(estimator %in% c("weibull", "ecdf"))) {
-    stop("'estimator' must be one of 'weibull' or 'ecdf'")
+  if(!(estimator %in% c(5,6,7,8,9))) {
+    stop("'estimator' must be one of 'c(5,6,7,8,9)'")
   }
 
   ## check that Q and C have units
@@ -107,6 +111,7 @@ calc_ldc <- function(.tbl,
 
   .tbl %>%
     as_tibble(.tbl) %>%
+    arrange(!! enquo(Q)) %>%
     mutate(
       ## daily flow in units of the concentration denominator
       Daily_Flow_Volume = set_units(!! enquo(Q),
@@ -131,22 +136,22 @@ calc_ldc <- function(.tbl,
 #' Estimate exceedance probability
 #'
 #' @param Q vector of streamflow values
-#' @param estimator string, either 'weibull' or 'ecdf'
+#' @param estimator numeric, values one of 5, 6, 7, 8, or 9. Type 6 corresponds to Weibull plotting position and is the default
 #'
 #' @return vector of streamflow percentiles
 #' @noRd
 #' @keywords internal
 #' @importFrom stats ecdf
 p_estimator <- function(Q,
-                        estimator) {
+                        estimator = 6) {
 
-  if(estimator == "weibull") {
-    pp <- wb_pp(Q)
-  }
+  if (estimator == 5) a = 0.5
+  if (estimator == 6) a = 0 # weibull default
+  if (estimator == 7) a = 1
+  if (estimator == 8) a = 1/3
+  if (estimator == 9) a = 3/8
 
-  if(estimator == "ecdf") {
-    pp <- 1 - ecdf(Q)(Q)
-  }
+  pp <- 1 - stats::ppoints(Q, a = a)
 
   return(pp)
 
