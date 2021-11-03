@@ -40,8 +40,9 @@
 
 
 <meta property="og:title" content="Calculate load duration curve — calc_ldc" />
-<meta property="og:description" content="Calculates the daily load duration curve from a data frame that includes mean
-daily flow and associated point measurements of pollutant concentration." />
+<meta property="og:description" content="Calculates the period of record load duration curve from a data frame that
+includes mean daily flow and associated point measurements of pollutant
+concentration." />
 
 
 
@@ -133,8 +134,9 @@ daily flow and associated point measurements of pollutant concentration." />
     </div>
 
     <div class="ref-description">
-    <p>Calculates the daily load duration curve from a data frame that includes mean
-daily flow and associated point measurements of pollutant concentration.</p>
+    <p>Calculates the period of record load duration curve from a data frame that
+includes mean daily flow and associated point measurements of pollutant
+concentration.</p>
     </div>
 
     <pre class="usage"><span class='fu'>calc_ldc</span><span class='op'>(</span>
@@ -143,7 +145,8 @@ daily flow and associated point measurements of pollutant concentration.</p>
   C <span class='op'>=</span> <span class='cn'>NULL</span>,
   allowable_concentration <span class='op'>=</span> <span class='cn'>NULL</span>,
   breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0.8</span>, <span class='fl'>0.4</span>, <span class='fl'>0</span><span class='op'>)</span>,
-  labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"High Flows"</span>, <span class='st'>"Medium Flows"</span>, <span class='st'>"Low Flows"</span><span class='op'>)</span>
+  labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"High Flows"</span>, <span class='st'>"Medium Flows"</span>, <span class='st'>"Low Flows"</span><span class='op'>)</span>,
+  estimator <span class='op'>=</span> <span class='fl'>6</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -173,11 +176,17 @@ allowable pollutant concentration.</p></td>
     <tr>
       <th>breaks</th>
       <td><p>a numeric vector of break points for flow categories. Must be
-of length of labels + 1. defaults to <code><a href='https://rdrr.io/r/base/c.html'>c(1, 0.8, 0.4, 0)</a></code>.</p></td>
+of length of labels + 1. defaults to <code>c(1, 0.8, 0.4, 0)</code>.</p></td>
     </tr>
     <tr>
       <th>labels</th>
       <td><p>labels for the categories specified by breaks.</p></td>
+    </tr>
+    <tr>
+      <th>estimator</th>
+      <td><p>numeric, one of <code>c(5,6,7,8,9)</code>. <code>6</code> is the default
+method correponding to the Weibull plotting position. Further details are
+provided in <code><a href='https://rdrr.io/r/stats/quantile.html'>stats::quantile()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -187,54 +196,65 @@ of length of labels + 1. defaults to <code><a href='https://rdrr.io/r/base/c.htm
   Daily_Flow_Volume (discharge volume), Daily_Load (pollutant sample volume),
   P_Exceedance (exeedance probability), Flow_Category (as defined by breaks
   and labels).</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The exceedance probability is calculated from the descending order
+  of Daily Flows. By default, the Weibull plotting position is used:
+  $$p = P(Q &gt; q_i) =  \frac{i}{n+1}$$
+  where \(q_i, i = 1, 2, ... n\), is the i-th sorted streamflow value.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Basic example using built in Tres Palacios data</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/r-quantities/units/'>units</a></span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>udunits database from /usr/share/xml/udunits/udunits2.xml</span></div><div class='input'><span class='co'># Format data</span>
-<span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>install_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tres_palacios</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='co'>## filter data so this run quicker</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='co'>## flow must have units, here is is in cfs</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Flow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Flow</span>, <span class='st'>"ft^3/s"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='co'>## pollutant concentration must have units</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Indicator_Bacteria <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span>, <span class='st'>"cfu/100mL"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># Calculate LDC</span>
-
-<span class='co'>## specify the allowable concentration</span>
-<span class='va'>allowable_concentration</span> <span class='op'>&lt;-</span> <span class='fl'>126</span>
-<span class='co'>## set the units</span>
-<span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>units</a></span><span class='op'>(</span><span class='va'>allowable_concentration</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"cfu/100mL"</span>
-<span class='va'>df_ldc</span> <span class='op'>&lt;-</span> <span class='fu'>calc_ldc</span><span class='op'>(</span><span class='va'>df</span>,
-                   Q <span class='op'>=</span> <span class='va'>Flow</span>,
-                   C <span class='op'>=</span> <span class='va'>Indicator_Bacteria</span>,
-                   allowable_concentration <span class='op'>=</span> <span class='va'>allowable_concentration</span><span class='op'>)</span>
-<span class='va'>df_ldc</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 72 × 9</span>
-#&gt;    site_no  Date           Flow Indicator_Bacteria Daily_Flow_Volume Daily_Load
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>     <span style='color: #949494;'>[ft^3/s]</span>        <span style='color: #949494;'>[cfu/100mL]</span>         <span style='color: #949494;'>[100mL/d]</span>    <span style='color: #949494;'>[cfu/d]</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> 08162600 2000-12-20     9.8                  85        239<span style='text-decoration: underline;'>764</span>403.    2.04<span style='color: #949494;'>e</span>10
-#&gt; <span style='color: #BCBCBC;'> 2</span> 08162600 2001-03-14    10                    10        244<span style='text-decoration: underline;'>657</span>555.    2.45<span style='color: #949494;'>e</span> 9
-#&gt; <span style='color: #BCBCBC;'> 3</span> 08162600 2001-06-21    21                   183        513<span style='text-decoration: underline;'>780</span>865.    9.40<span style='color: #949494;'>e</span>10
-#&gt; <span style='color: #BCBCBC;'> 4</span> 08162600 2002-01-10    22                   537        538<span style='text-decoration: underline;'>246</span>620.    2.89<span style='color: #949494;'>e</span>11
-#&gt; <span style='color: #BCBCBC;'> 5</span> 08162600 2002-03-26    12                    52        293<span style='text-decoration: underline;'>589</span>065.    1.53<span style='color: #949494;'>e</span>10
-#&gt; <span style='color: #BCBCBC;'> 6</span> 08162600 2002-06-12     9.2                  74        225<span style='text-decoration: underline;'>084</span>950.    1.67<span style='color: #949494;'>e</span>10
-#&gt; <span style='color: #BCBCBC;'> 7</span> 08162600 2002-12-10  <span style='text-decoration: underline;'>1</span>630                 <span style='text-decoration: underline;'>24</span>192      <span style='text-decoration: underline;'>39</span>879<span style='text-decoration: underline;'>181</span>392.    9.65<span style='color: #949494;'>e</span>14
-#&gt; <span style='color: #BCBCBC;'> 8</span> 08162600 2003-03-25    18.6                 169        455<span style='text-decoration: underline;'>063</span>051.    7.69<span style='color: #949494;'>e</span>10
-#&gt; <span style='color: #BCBCBC;'> 9</span> 08162600 2003-06-24     7.12                 10        174<span style='text-decoration: underline;'>196</span>179.    1.74<span style='color: #949494;'>e</span> 9
-#&gt; <span style='color: #BCBCBC;'>10</span> 08162600 2003-09-23   760                   404      <span style='text-decoration: underline;'>18</span>593<span style='text-decoration: underline;'>974</span>146.    7.51<span style='color: #949494;'>e</span>12
-#&gt; <span style='color: #949494;'># … with 62 more rows, and 3 more variables: Allowable_Daily_Load [cfu/d],</span>
-#&gt; <span style='color: #949494;'>#   P_Exceedance &lt;dbl&gt;, Flow_Category &lt;fct&gt;</span></div><div class='input'>
-<span class='co'>## cleanup</span>
-<span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>remove_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Basic example using built in Tres Palacios data</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘dplyr’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     filter, lag</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     intersect, setdiff, setequal, union</span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/r-quantities/units/'>units</a></span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> udunits database from /usr/share/xml/udunits/udunits2.xml</span>
+<span class='r-in'><span class='co'># Format data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>install_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tres_palacios</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='co'>## filter data so this run quicker</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='co'>## flow must have units, here is is in cfs</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Flow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Flow</span>, <span class='st'>"ft^3/s"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='co'>## pollutant concentration must have units</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Indicator_Bacteria <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span>, <span class='st'>"cfu/100mL"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># Calculate LDC</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## specify the allowable concentration</span></span>
+<span class='r-in'><span class='va'>allowable_concentration</span> <span class='op'>&lt;-</span> <span class='fl'>126</span></span>
+<span class='r-in'><span class='co'>## set the units</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>units</a></span><span class='op'>(</span><span class='va'>allowable_concentration</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"cfu/100mL"</span></span>
+<span class='r-in'><span class='va'>df_ldc</span> <span class='op'>&lt;-</span> <span class='fu'>calc_ldc</span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>                   Q <span class='op'>=</span> <span class='va'>Flow</span>,</span>
+<span class='r-in'>                   C <span class='op'>=</span> <span class='va'>Indicator_Bacteria</span>,</span>
+<span class='r-in'>                   allowable_concentration <span class='op'>=</span> <span class='va'>allowable_concentration</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>df_ldc</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 72 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    site_no  Date           Flow Indicator_Bacteria Daily_Flow_Volume  Daily_Load</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>     <span style='color: #949494;'>[ft^3/s]</span>        <span style='color: #949494;'>[cfu/100mL]</span>         <span style='color: #949494;'>[100mL/d]</span>     <span style='color: #949494;'>[cfu/d]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> 08162600 2011-09-28     4.99                770        122<span style='text-decoration: underline;'>084</span>120.     9.40<span style='color: #949494;'>e</span>10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> 08162600 2009-09-09     5.52                 92        135<span style='text-decoration: underline;'>050</span>970.     1.24<span style='color: #949494;'>e</span>10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> 08162600 2003-06-24     7.12                 10        174<span style='text-decoration: underline;'>196</span>179.     1.74<span style='color: #949494;'>e</span> 9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> 08162600 2009-06-11     7.7                 160        188<span style='text-decoration: underline;'>386</span>317.     3.01<span style='color: #949494;'>e</span>10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> 08162600 2010-12-16     8.99                 93        219<span style='text-decoration: underline;'>947</span>142.     2.05<span style='color: #949494;'>e</span>10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> 08162600 2008-12-16     9.06                 74        221<span style='text-decoration: underline;'>659</span>744.     1.64<span style='color: #949494;'>e</span>10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> 08162600 2012-01-04     9.15                220        223<span style='text-decoration: underline;'>861</span>662.     4.92<span style='color: #949494;'>e</span>10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> 08162600 2002-06-12     9.2                  74        225<span style='text-decoration: underline;'>084</span>950.     1.67<span style='color: #949494;'>e</span>10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> 08162600 2016-02-10     9.46                 32        231<span style='text-decoration: underline;'>446</span>047.     7.41<span style='color: #949494;'>e</span> 9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> 08162600 2016-04-06     9.46                 31        231<span style='text-decoration: underline;'>446</span>047.     7.17<span style='color: #949494;'>e</span> 9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 62 more rows, and 3 more variables: Allowable_Daily_Load [cfu/d],</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   P_Exceedance &lt;dbl&gt;, Flow_Category &lt;fct&gt;</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## cleanup</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>remove_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

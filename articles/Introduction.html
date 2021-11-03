@@ -116,12 +116,12 @@
 <span class="co">#&gt;     intersect, setdiff, setequal, union</span>
 
 <span class="co">## load example data</span>
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">tres_palacios</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">tres_palacios</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="co">## filter this to the last 6 years of data</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"2014-01-01"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## show the data filtered to paired Q and C observations</span>
-<span class="va">df</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span><span class="op">)</span><span class="op">)</span>
+<span class="va">df</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 27 × 4</span>
 <span class="co">#&gt;    site_no  Date        Flow Indicator_Bacteria</span>
 <span class="co">#&gt;    &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt;              &lt;dbl&gt;</span>
@@ -147,7 +147,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/units/man/install_unit.html">install_unit</a></span><span class="op">(</span><span class="st">"cfu"</span><span class="op">)</span>
 
 <span class="co">## change Q and C to unit objects with appropriate units</span>
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Flow</span>, <span class="st">"ft^3/s"</span><span class="op">)</span>,
          Indicator_Bacteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span>, <span class="st">"cfu/100mL"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">df</span>
@@ -183,8 +183,8 @@
 <li><p>Q is the variable name in .tbl for discharge or flow.</p></li>
 <li><p>C is the variable name for measured pollutant concentration.</p></li>
 <li><p>allowable_concentration is an object of class units specifying the allowable pollutant concentration (water quality standard). This must have the same units as C.</p></li>
-<li><p>breaks is a numeric vector from (1 -&gt; 0) that indicates the break points for flow duration intervals. The length of the vector should be 1 more than the number of flow duration intervals. For example, <code><a href="https://rdrr.io/r/base/c.html">c(1, 0.9, 0.6, 0.4, 0.1, 0)</a></code> has 6 breaks and 5 flow duration intervals.</p></li>
-<li><p>labels is a vector with the names for each flow duration interval. For example, <code><a href="https://rdrr.io/r/base/c.html">c("Highest flows", "High Flows", "Moderate Flows", "Dry Conditions", "Lowest Flows")</a></code>.</p></li>
+<li><p>breaks is a numeric vector from (1 -&gt; 0) that indicates the break points for flow duration intervals. The length of the vector should be 1 more than the number of flow duration intervals. For example, <code>c(1, 0.9, 0.6, 0.4, 0.1, 0)</code> has 6 breaks and 5 flow duration intervals.</p></li>
+<li><p>labels is a vector with the names for each flow duration interval. For example, <code>c("Highest flows", "High Flows", "Moderate Flows", "Dry Conditions", "Lowest Flows")</code>.</p></li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## set the allowable concentration</span>
@@ -200,20 +200,20 @@
                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Highest flows"</span>, <span class="st">"High Flows"</span>, <span class="st">"Moderate Flows"</span>, <span class="st">"Dry Conditions"</span>, <span class="st">"Lowest Flows"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## show the result</span>
-<span class="va">df_ldc</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span><span class="op">)</span><span class="op">)</span>
+<span class="va">df_ldc</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 27 × 9</span>
-<span class="co">#&gt;    site_no  Date           Flow Indicator_Bacteria Daily_Flow_Volume Daily_Load</span>
-<span class="co">#&gt;    &lt;chr&gt;    &lt;date&gt;     [ft^3/s]        [cfu/100mL]         [100mL/d]    [cfu/d]</span>
-<span class="co">#&gt;  1 08162600 2014-03-05    59.3               16000       1450819299.    2.32e13</span>
-<span class="co">#&gt;  2 08162600 2014-06-17    13.6                  52        332734274.    1.73e10</span>
-<span class="co">#&gt;  3 08162600 2014-10-02    20.4                 250        499101411.    1.25e11</span>
-<span class="co">#&gt;  4 08162600 2014-12-04    66.5                2400       1626972738.    3.90e12</span>
-<span class="co">#&gt;  5 08162600 2015-03-17    25.9                 180        633663066.    1.14e11</span>
-<span class="co">#&gt;  6 08162600 2016-02-10     9.46                 32        231446047.    7.41e 9</span>
-<span class="co">#&gt;  7 08162600 2016-04-06     9.46                 31        231446047.    7.17e 9</span>
-<span class="co">#&gt;  8 08162600 2016-06-16    28.3                  75        692380879.    5.19e10</span>
-<span class="co">#&gt;  9 08162600 2016-09-28    25.4                  31        621430189.    1.93e10</span>
-<span class="co">#&gt; 10 08162600 2016-12-14    15.9                 110        389005512.    4.28e10</span>
+<span class="co">#&gt;    site_no  Date           Flow Indicator_Bacteria Daily_Flow_Volume  Daily_Load</span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;date&gt;     [ft^3/s]        [cfu/100mL]         [100mL/d]     [cfu/d]</span>
+<span class="co">#&gt;  1 08162600 2016-02-10     9.46                 32        231446047.     7.41e 9</span>
+<span class="co">#&gt;  2 08162600 2016-04-06     9.46                 31        231446047.     7.17e 9</span>
+<span class="co">#&gt;  3 08162600 2020-08-24    10.7                 130        261783583.     3.40e10</span>
+<span class="co">#&gt;  4 08162600 2019-10-15    12.7                 310        310715094.     9.63e10</span>
+<span class="co">#&gt;  5 08162600 2014-06-17    13.6                  52        332734274.     1.73e10</span>
+<span class="co">#&gt;  6 08162600 2018-07-24    14.3                  20        349860303.     7.00e 9</span>
+<span class="co">#&gt;  7 08162600 2020-10-28    14.5                 130        354753454.     4.61e10</span>
+<span class="co">#&gt;  8 08162600 2020-05-06    14.7                 110        359646605.     3.96e10</span>
+<span class="co">#&gt;  9 08162600 2020-01-15    14.8                  84        362093181.     3.04e10</span>
+<span class="co">#&gt; 10 08162600 2016-12-14    15.9                 110        389005512.     4.28e10</span>
 <span class="co">#&gt; # … with 17 more rows, and 3 more variables: Allowable_Daily_Load [cfu/d],</span>
 <span class="co">#&gt; #   P_Exceedance &lt;dbl&gt;, Flow_Category &lt;fct&gt;</span></code></pre></div>
 <p><strong><code>summ_ldc</code></strong></p>
@@ -237,11 +237,11 @@
 <span class="co">#&gt; # A tibble: 5 × 6</span>
 <span class="co">#&gt;   Flow_Category Median_Flow Median_P Geomean_C Median_Daily_Fl… Median_Flow_Load</span>
 <span class="co">#&gt;   &lt;fct&gt;            [ft^3/s]    &lt;dbl&gt; [cfu/100mL]        [100mL/d]          [cfu/d]</span>
-<span class="co">#&gt; 1 Highest flows      507      0.0501     410       12404138016.          5.09e12</span>
-<span class="co">#&gt; 2 High Flows          43.7    0.251      284.       1069153513.          3.03e11</span>
-<span class="co">#&gt; 3 Moderate Flo…       20.6    0.503       79.2       503994562.          3.99e10</span>
-<span class="co">#&gt; 4 Dry Conditio…       14.2    0.752      101.        347413727.          3.51e10</span>
-<span class="co">#&gt; 5 Lowest Flows         8.99   0.950       31.5       219947142.          6.93e 9</span></code></pre></div>
+<span class="co">#&gt; 1 Highest flows       514     0.0500     410       12575398304.          5.16e12</span>
+<span class="co">#&gt; 2 High Flows           43.9   0.25       284.       1074046664.          3.05e11</span>
+<span class="co">#&gt; 3 Moderate Flo…        20.8   0.5         79.2       508887713.          4.03e10</span>
+<span class="co">#&gt; 4 Dry Conditio…        14.3   0.75       101.        349860303.          3.54e10</span>
+<span class="co">#&gt; 5 Lowest Flows          9     0.950       31.5       220191799.          6.94e 9</span></code></pre></div>
 <p><strong><code>draw_ldc</code></strong></p>
 <p>The final function is <code><a href="../reference/draw_ldc.html">draw_ldc()</a></code> which uses the output from the previous two functions to generate a plot as a ggplot object. There are many arguments in this function, I won’t describe them all but details are available using <code><a href="../reference/draw_ldc.html">?draw_ldc</a></code>. Importantly, since the output is a ggplot object, the output can be modified using many of the available ggplot functions.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

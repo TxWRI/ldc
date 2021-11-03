@@ -215,7 +215,7 @@ summary statistic values. defaults to <code>"red"</code>.</p></td>
       <th>label_nudge_y</th>
       <td><p>numeric value to vertically nudge flow category labels.
 If a log10 transformed scale is being used, a log value is probably
-appropriate for example <code><a href='https://rdrr.io/r/base/Log.html'>log10(1000)</a></code>.</p></td>
+appropriate for example <code>log10(1000)</code>.</p></td>
     </tr>
     <tr>
       <th>label_font_family</th>
@@ -239,52 +239,53 @@ will break at spaces.</p></td>
     <p>ggplot object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Basic example using built in Tres Palacios data</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/r-quantities/units/'>units</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-<span class='co'># Format data</span>
-<span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>install_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tres_palacios</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-        <span class='co'>## filter data so this run quicker</span>
-        <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-        <span class='co'>## flow must have units, here is is in cfs</span>
-        <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Flow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Flow</span>, <span class='st'>"ft^3/s"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-        <span class='co'>## pollutant concentration must have units</span>
-        <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Indicator_Bacteria <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span>, <span class='st'>"cfu/100mL"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># Calculate LDC</span>
-
-<span class='co'>## specify the allowable concentration</span>
-<span class='va'>allowable_concentration</span> <span class='op'>&lt;-</span> <span class='fl'>126</span>
-<span class='co'>## set the units</span>
-<span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>units</a></span><span class='op'>(</span><span class='va'>allowable_concentration</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"cfu/100mL"</span>
-<span class='va'>df_ldc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='calc_ldc.html'>calc_ldc</a></span><span class='op'>(</span><span class='va'>df</span>,
-                   Q <span class='op'>=</span> <span class='va'>Flow</span>,
-                   C <span class='op'>=</span> <span class='va'>Indicator_Bacteria</span>,
-                   allowable_concentration <span class='op'>=</span> <span class='va'>allowable_concentration</span><span class='op'>)</span>
-
-<span class='co'># Summarize LDC</span>
-<span class='va'>df_sum</span> <span class='op'>&lt;-</span> <span class='fu'><a href='summ_ldc.html'>summ_ldc</a></span><span class='op'>(</span><span class='va'>df_ldc</span>,
-                   Q <span class='op'>=</span> <span class='va'>Flow</span>,
-                   C <span class='op'>=</span> <span class='va'>Indicator_Bacteria</span>,
-                   Exceedance <span class='op'>=</span> <span class='va'>P_Exceedance</span>,
-                   groups <span class='op'>=</span> <span class='va'>Flow_Category</span>,
-                   method <span class='op'>=</span> <span class='st'>"geomean"</span><span class='op'>)</span>
-
-<span class='co'># Create ggplot object</span>
-<span class='fu'>draw_ldc</span><span class='op'>(</span><span class='va'>df_ldc</span>,
-         <span class='va'>df_sum</span>,
-         y_lab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>italic</a></span><span class='op'>(</span><span class='st'>"E. coli"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-         label_nudge_y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log10</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-         <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-         <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>legend.title <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_blank</a></span><span class='op'>(</span><span class='op'>)</span>,
-               legend.direction <span class='op'>=</span> <span class='st'>"vertical"</span>,
-               legend.position <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span>
-</div><div class='img'><img src='draw_ldc-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'>## cleanup</span>
-<span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>remove_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Basic example using built in Tres Palacios data</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/r-quantities/units/'>units</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># Format data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>install_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tres_palacios</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>        <span class='co'>## filter data so this run quicker</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>        <span class='co'>## flow must have units, here is is in cfs</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Flow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Flow</span>, <span class='st'>"ft^3/s"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>        <span class='co'>## pollutant concentration must have units</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>Indicator_Bacteria <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>set_units</a></span><span class='op'>(</span><span class='va'>Indicator_Bacteria</span>, <span class='st'>"cfu/100mL"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># Calculate LDC</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## specify the allowable concentration</span></span>
+<span class='r-in'><span class='va'>allowable_concentration</span> <span class='op'>&lt;-</span> <span class='fl'>126</span></span>
+<span class='r-in'><span class='co'>## set the units</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/units/man/units.html'>units</a></span><span class='op'>(</span><span class='va'>allowable_concentration</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='st'>"cfu/100mL"</span></span>
+<span class='r-in'><span class='va'>df_ldc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='calc_ldc.html'>calc_ldc</a></span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>                   Q <span class='op'>=</span> <span class='va'>Flow</span>,</span>
+<span class='r-in'>                   C <span class='op'>=</span> <span class='va'>Indicator_Bacteria</span>,</span>
+<span class='r-in'>                   allowable_concentration <span class='op'>=</span> <span class='va'>allowable_concentration</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Summarize LDC</span></span>
+<span class='r-in'><span class='va'>df_sum</span> <span class='op'>&lt;-</span> <span class='fu'><a href='summ_ldc.html'>summ_ldc</a></span><span class='op'>(</span><span class='va'>df_ldc</span>,</span>
+<span class='r-in'>                   Q <span class='op'>=</span> <span class='va'>Flow</span>,</span>
+<span class='r-in'>                   C <span class='op'>=</span> <span class='va'>Indicator_Bacteria</span>,</span>
+<span class='r-in'>                   Exceedance <span class='op'>=</span> <span class='va'>P_Exceedance</span>,</span>
+<span class='r-in'>                   groups <span class='op'>=</span> <span class='va'>Flow_Category</span>,</span>
+<span class='r-in'>                   method <span class='op'>=</span> <span class='st'>"geomean"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Create ggplot object</span></span>
+<span class='r-in'><span class='fu'>draw_ldc</span><span class='op'>(</span><span class='va'>df_ldc</span>,</span>
+<span class='r-in'>         <span class='va'>df_sum</span>,</span>
+<span class='r-in'>         y_lab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/grDevices/plotmath.html'>italic</a></span><span class='op'>(</span><span class='st'>"E. coli"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>         label_nudge_y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log10</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>         <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>         <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>legend.title <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_blank</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>               legend.direction <span class='op'>=</span> <span class='st'>"vertical"</span>,</span>
+<span class='r-in'>               legend.position <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='draw_ldc-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## cleanup</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/units/man/install_unit.html'>remove_unit</a></span><span class='op'>(</span><span class='st'>"cfu"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

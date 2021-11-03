@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • ldc</title>
+<title>Calculate annualized load duration curve — calc_annual_ldc • ldc</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Calculate annualized load duration curve — calc_annual_ldc" />
+<meta property="og:description" content="Calculates the median annual ldc with confidence intervals." />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -123,66 +124,90 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Calculate annualized load duration curve</h1>
+    <small class="dont-index">Source: <a href='https://github.com/TxWRI/ldc/blob/gh-pages/R/calc_annual_ldc.R'><code>R/calc_annual_ldc.R</code></a></small>
+    <div class="hidden name"><code>calc_annual_ldc.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Calculates the median annual ldc with confidence intervals.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>calc_annual_ldc</span><span class='op'>(</span>
+  <span class='va'>.tbl</span>,
+  Q <span class='op'>=</span> <span class='cn'>NULL</span>,
+  C <span class='op'>=</span> <span class='cn'>NULL</span>,
+  Date <span class='op'>=</span> <span class='cn'>NULL</span>,
+  allowable_concentration <span class='op'>=</span> <span class='cn'>NULL</span>,
+  breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0.8</span>, <span class='fl'>0.4</span>, <span class='fl'>0</span><span class='op'>)</span>,
+  labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"High Flows"</span>, <span class='st'>"Medium Flows"</span>, <span class='st'>"Low Flows"</span><span class='op'>)</span>,
+  estimator <span class='op'>=</span> <span class='fl'>6</span>,
+  n <span class='op'>=</span> <span class='fl'>500</span>
+<span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="calc_annual_ldc.html">calc_annual_ldc()</a></code> </p>
-        </td>
-        <td><p>Calculate annualized load duration curve</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="calc_ldc.html">calc_ldc()</a></code> </p>
-        </td>
-        <td><p>Calculate load duration curve</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="draw_ldc.html">draw_ldc()</a></code> </p>
-        </td>
-        <td><p>Draw a load duration curve</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="summ_ldc.html">summ_ldc()</a></code> </p>
-        </td>
-        <td><p>Summarize load duration curve</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tres_palacios.html">tres_palacios</a></code> </p>
-        </td>
-        <td><p>Mean daily flow and point E. coli bacteria measurements.</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>.tbl</th>
+      <td><p>data frame with at least three columns Q (discharge or flow), C
+(associated pollutant concentration), and Date.</p></td>
+    </tr>
+    <tr>
+      <th>Q</th>
+      <td><p>variable name in .tbl for discharge or flow. This must be of class
+`units`, typically with a units value of "ft^3/s".</p></td>
+    </tr>
+    <tr>
+      <th>C</th>
+      <td><p>variable name in .tbl for associated pollutant concentration at a
+given flow value. This must be of class `units`, typically with a units
+value of "mg/L" or "cfu/100mL".</p></td>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <td><p>variable name in .tbl for the event Date. This variable must be
+of class `Date`.</p></td>
+    </tr>
+    <tr>
+      <th>allowable_concentration</th>
+      <td><p>an object of class <code>units</code> specifying the
+allowable pollutant concentration.</p></td>
+    </tr>
+    <tr>
+      <th>breaks</th>
+      <td><p>a numeric vector of break points for flow categories. Must be
+of length of labels + 1. defaults to <code>c(1, 0.8, 0.4, 0)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>labels</th>
+      <td><p>labels for the categories specified by breaks.</p></td>
+    </tr>
+    <tr>
+      <th>estimator</th>
+      <td><p>numeric, one of <code>c(5,6,7,8,9)</code>. <code>6</code> is the default
+method correponding to the Weibull plotting position. Further details are
+provided in <code><a href='https://rdrr.io/r/stats/quantile.html'>stats::quantile()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>numeric, the length of generated probability points. Larger n may
+result in a slightly smoother curve at a cost of increased processing time.
+The probability points are used to generate the continuous sample quantiles
+types 5 to 9 (see <code>quantile</code>).</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>list of two tibbles (Q and C). Includes variables in .tbl and
+  Daily_Flow_Volume (discharge volume), Daily_Load (pollutant sample volume),
+  P_Exceedance (exeedance probability), Flow_Category (as defined by breaks
+  and labels).</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

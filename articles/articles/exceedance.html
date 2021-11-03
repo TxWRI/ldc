@@ -97,12 +97,32 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/TxWRI/ldc">ldc</a></span><span class="op">)</span></code></pre></div>
-<p><strong>placeholder</strong></p>
+<div id="flow-duration-curve-percentiles" class="section level1">
+<h1 class="hasAnchor">
+<a href="#flow-duration-curve-percentiles" class="anchor"></a>Flow Duration Curve Percentiles</h1>
+<p><span class="citation">@vogel_flowduration_1994</span> describes the flow duration curve (FDC), from which the load duration curve (LDC) is calculated, as the complement of the cumulative distribution function of daily streamflow. For each value of discharge, the corresponding exceedance probability <span class="math inline">\(p\)</span> is calculated as 1 minus the empirical cumulative distribution function. By setting the <code><a href="../../reference/calc_ldc.html">calc_ldc()</a></code> argument <code>estimator = 'ecdf'</code> p is calculated for observation <span class="math inline">\(Q_i\)</span> where <span class="math inline">\(i = 1, 2, ... n\)</span>:</p>
+<p><span class="math display">\[
+p = 1 - P \{Q_i\le q_0\} \\
+where \\
+P\{Q_i&gt;q_0\} = \frac{number\ of\ Q_i \le q_0}{number\ of\ observations} = \frac{\sum_{i=1}^n{I(Q_i \le q_0)}}{n} = \frac{1}{n}\sum_{i=1}^n I(Q_i \le q_0)
+\]</span></p>
+<p>This can be interpreted as the exceedance probability (<span class="math inline">\(p\)</span>) of <span class="math inline">\(Q_i\)</span> is equal to one minus the ranked position of <span class="math inline">\(Q_i\)</span> divided by number of observations.</p>
+<p>The default method for estimating <span class="math inline">\(p\)</span> is the Weibull plotting position (<code>estimator = 'weibull'</code>). The Weibull plotting position provides a unbiased estimates of <span class="math inline">\(p_i\)</span> regardless of the underlying streamflow distribution <span class="citation">[@vogel_flowduration_1994]</span>. The Weibull plotting position is calculated <span class="math inline">\(p\)</span> where <span class="math inline">\(q_i\)</span>, <span class="math inline">\(i = 1, 2, ... n\)</span>, is the <span class="math inline">\(i\)</span>th sorted streamflow value:</p>
+<p><span class="math display">\[
+p = P(Q &gt; q_i) =  \frac{i}{n+1}
+\]</span></p>
+</div>
+<div id="alternative-percentile-calculations" class="section level1">
+<h1 class="hasAnchor">
+<a href="#alternative-percentile-calculations" class="anchor"></a>Alternative Percentile Calculations</h1>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
