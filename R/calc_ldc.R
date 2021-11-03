@@ -141,7 +141,7 @@ calc_ldc <- function(.tbl,
 #' @return vector of streamflow percentiles
 #' @noRd
 #' @keywords internal
-#' @importFrom stats ecdf
+#' @importFrom stats ppoints
 p_estimator <- function(Q,
                         estimator = 6) {
 
