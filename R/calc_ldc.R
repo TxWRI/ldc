@@ -1,7 +1,8 @@
 #' Calculate load duration curve
 #'
-#' Calculates the daily load duration curve from a data frame that includes mean
-#' daily flow and associated point measurements of pollutant concentration.
+#' Calculates the period of record load duration curve from a data frame that
+#' includes mean daily flow and associated point measurements of pollutant
+#' concentration.
 #'
 #' @param .tbl data frame with at least two columns Q (discharge or flow) and C
 #'   (associated pollutant concentration).
@@ -15,11 +16,18 @@
 #' @param breaks a numeric vector of break points for flow categories. Must be
 #'   of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.
 #' @param labels labels for the categories specified by breaks.
+#' @param estimator numeric, one of \code{c(5,6,7,8,9)}. \code{6} is the default
+#'   method correponding to the Weibull plotting position. Further details are
+#'   provided in \code{stats::quantile()}.
 #'
 #' @return object of class tibble. Includes variables in .tbl and
 #'   Daily_Flow_Volume (discharge volume), Daily_Load (pollutant sample volume),
 #'   P_Exceedance (exeedance probability), Flow_Category (as defined by breaks
 #'   and labels).
+#' @details The exceedance probability is calculated from the descending order
+#'   of Daily Flows. By default, the Weibull plotting position is used:
+#'   \deqn{p = P(Q > q_i) =  \frac{i}{n+1}}
+#'   where \eqn{q_i, i = 1, 2, ... n}, is the i-th sorted streamflow value.
 #' @import rlang dplyr units
 #' @importFrom stats median
 #' @export
@@ -55,11 +63,26 @@ calc_ldc <- function(.tbl,
                      C = NULL,
                      allowable_concentration = NULL,
                      breaks = c(1, 0.8, 0.4, 0),
-                     labels = c("High Flows", "Medium Flows", "Low Flows")) {
+                     labels = c("High Flows", "Medium Flows", "Low Flows"),
+                     estimator = 6) {
 
-  #Q_col <- substitute(Q)
 
-  class(.tbl[[substitute(Q)]])
+  ## basic checks
+  if(is.null(substitute(Q))) {
+    stop(paste0("Please specify a col 'Q' from '", as_name(enquo(.tbl)),"'"))
+  }
+
+  if(is.null(substitute(C))) {
+    stop(paste0("Please specify a col 'C' from '", as_name(enquo(.tbl)), "'"))
+  }
+
+  if(is.null(allowable_concentration)) {
+    stop("'allowable_concentration' cannot be 'NULL'")
+  }
+
+  if(!(estimator %in% c(5,6,7,8,9))) {
+    stop("'estimator' must be one of 'c(5,6,7,8,9)'")
+  }
 
   ## check that Q and C have units
   if (class(.tbl[[substitute(Q)]]) != "units") {
@@ -88,6 +111,7 @@ calc_ldc <- function(.tbl,
 
   .tbl %>%
     as_tibble(.tbl) %>%
+    arrange(!! enquo(Q)) %>%
     mutate(
       ## daily flow in units of the concentration denominator
       Daily_Flow_Volume = set_units(!! enquo(Q),
@@ -98,12 +122,51 @@ calc_ldc <- function(.tbl,
       ## daily allowable load
       Allowable_Daily_Load = .data$Daily_Flow_Volume * allowable_concentration,
       ## proportion of days flow exceeded
-      P_Exceedance = 1 - cume_dist(!! enquo(Q)),
+      P_Exceedance = p_estimator(!! enquo(Q), estimator = estimator),
       ## bin the flow exceedance values
       Flow_Category = cut(.data$P_Exceedance, breaks = breaks, labels = labels,
                           right = FALSE)) -> .tbl
 
   attr(.tbl, "breaks") <- breaks
   return(.tbl)
+
+}
+
+
+#' Estimate exceedance probability
+#'
+#' @param Q vector of streamflow values
+#' @param estimator numeric, values one of 5, 6, 7, 8, or 9. Type 6 corresponds to Weibull plotting position and is the default
+#'
+#' @return vector of streamflow percentiles
+#' @noRd
+#' @keywords internal
+#' @importFrom stats ppoints
+p_estimator <- function(Q,
+                        estimator = 6) {
+
+  if (estimator == 5) a = 0.5
+  if (estimator == 6) a = 0 # weibull default
+  if (estimator == 7) a = 1
+  if (estimator == 8) a = 1/3
+  if (estimator == 9) a = 3/8
+
+  pp <- 1 - stats::ppoints(Q, a = a)
+
+  return(pp)
+
+
+}
+
+wb_pp <- function(x) {
+
+  r <- rank(-x,
+            na.last = NA,
+            ties.method = "first")
+  n <- length(x)
+
+  pp <- r/(n+1)
+
+  return(pp)
 
 }

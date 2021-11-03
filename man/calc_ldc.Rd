@@ -10,7 +10,8 @@ calc_ldc(
   C = NULL,
   allowable_concentration = NULL,
   breaks = c(1, 0.8, 0.4, 0),
-  labels = c("High Flows", "Medium Flows", "Low Flows")
+  labels = c("High Flows", "Medium Flows", "Low Flows"),
+  estimator = 6
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ allowable pollutant concentration.}
 of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.}
 
 \item{labels}{labels for the categories specified by breaks.}
+
+\item{estimator}{numeric, one of \code{c(5,6,7,8,9)}. \code{6} is the default
+method correponding to the Weibull plotting position. Further details are
+provided in \code{stats::quantile()}.}
 }
 \value{
 object of class tibble. Includes variables in .tbl and
@@ -39,8 +44,15 @@ object of class tibble. Includes variables in .tbl and
   and labels).
 }
 \description{
-Calculates the daily load duration curve from a data frame that includes mean
-daily flow and associated point measurements of pollutant concentration.
+Calculates the period of record load duration curve from a data frame that
+includes mean daily flow and associated point measurements of pollutant
+concentration.
+}
+\details{
+The exceedance probability is calculated from the descending order
+  of Daily Flows. By default, the Weibull plotting position is used:
+  \deqn{p = P(Q > q_i) =  \frac{i}{n+1}}
+  where \eqn{q_i, i = 1, 2, ... n}, is the i-th sorted streamflow value.
 }
 \examples{
 # Basic example using built in Tres Palacios data
