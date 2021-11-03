@@ -17,12 +17,14 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 2.10)
+    R (>= 2.10),
 RoxygenNote: 7.1.1
 Imports:
-    dplyr,
+    DescTools,
+    dplyr (>= 0.8.0),
     ggplot2,
     magrittr,
+    purrr,
     rlang,
     units
 URL: https://github.com/TxWRI/ldc
