@@ -23,6 +23,7 @@ Imports:
     DescTools,
     dplyr (>= 0.8.0),
     ggplot2,
+    Hmisc,
     magrittr,
     purrr,
     rlang,
