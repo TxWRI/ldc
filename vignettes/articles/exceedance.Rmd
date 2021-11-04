@@ -1,5 +1,6 @@
 ---
-title: "Calculating Exceedance Percentiles"
+title: "Quantile Estimation Procedures"
+bibliography: references.bib
 ---
 
 ```{r, include = FALSE}
@@ -14,24 +15,89 @@ library(ldc)
 ```
 
 
-# Flow Duration Curve Percentiles
-
-@vogel_flowduration_1994 describes the flow duration curve (FDC), from which the load duration curve (LDC) is calculated, as the complement of the cumulative distribution function of daily streamflow. For each value of discharge, the corresponding exceedance probability $p$ is calculated as 1 minus the empirical cumulative distribution function. By setting the `calc_ldc()` argument `estimator = 'ecdf'` p is calculated for observation $Q_i$ where $i = 1, 2, ... n$:
+@vogel_flowduration_1994 describes the flow duration curve (FDC), from which the load duration curve (LDC) is calculated, as the complement of the cumulative distribution function of daily streamflow. For each value of discharge, the corresponding exceedance probability $p$ is calculated as 1 minus the empirical cumulative distribution function. $p$ is calculated for each observation $Q_i$ where $i = 1, 2, ... n$:
 
 $$
 p = 1 - P \{Q_i\le q_0\} \\
-where \\
-P\{Q_i>q_0\} = \frac{number\ of\ Q_i \le q_0}{number\ of\ observations} = \frac{\sum_{i=1}^n{I(Q_i \le q_0)}}{n} = \frac{1}{n}\sum_{i=1}^n I(Q_i \le q_0)
 $$
 
-This can be interpreted as the exceedance probability ($p$) of $Q_i$ is equal to one minus the ranked position of $Q_i$ divided by number of observations. 
+The quantile $Q_p$ is the empirical quantile function. 
 
-The default method for estimating $p$ is the Weibull plotting position (`estimator = 'weibull'`). The Weibull plotting position provides a unbiased estimates of $p_i$ regardless of the underlying streamflow distribution [@vogel_flowduration_1994]. The Weibull plotting position is calculated $p$ where $q_i$, $i = 1, 2, ... n$, is the $i$th sorted streamflow value:
+The default method for estimating $p$ is the Weibull plotting position (`estimator = 6`). The Weibull plotting position provides a unbiased estimates of $p_i$ regardless of the underlying streamflow distribution [@vogel_flowduration_1994]. The Weibull plotting position is calculated $p$ where $q_i$, $i = 1, 2, ... n$, is the $i$th sorted streamflow value:
 
 $$
 p = P(Q > q_i) =  \frac{i}{n+1}
 $$
 
+This is equivalent to $Q_{p,1}$ described in @vogel_flowduration_1994 and is the default method used in `calc_ldc()` and `calc_annual_ldc()`.
 
-# Alternative Percentile Calculations
+# Alternative Quantile Estimators
 
+The Harrell-Davis distribution-free quantile estimator (`estimator = "hd"`) is described by @harrell_new_1982, which is equivalent to $Q_{p,3}$ described in @vogel_flowduration_1994.
+The math is not included here, but can be found in both @vogel_flowduration_1994 and @harrell_new_1982. @vogel_flowduration_1994 note this estimator provides smoother estimates of quantiles than $Q_{p,1}$ for small samples. This is particularly advantageous in calculating annualized flow duration curves and only included for the `calc_annual_ldc()` function. The `calc_annual_ldc()` function returns the quantiles only at measured streamflow values, so estimation of quantiles is not needed they are returned directly by the plotting position methods (estimator = 5:9).
+
+
+Exceedance probabilities can also be calculated using the continuous sample quantiles types 5 through 9 documented in `quantile()`. Type 6 is the default and described above. Type 5 is described in @hanzen_storage_1914:
+
+$$
+p = P(Q > q_i) =  \frac{i - 0.5}{n}
+$$
+
+
+The figure below shows the annual FDC resulting from each of the estimator methods:
+
+```{r annualldcs, echo=FALSE}
+df <- as_tibble(tres_palacios) 
+
+## load required packages
+library(units)
+library(dplyr)
+library(ggplot2)
+
+
+## make the cfu unit
+install_unit("cfu")
+
+## change Q and C to unit objects with appropriate units
+df <- df %>%
+  mutate(Flow = set_units(Flow, "ft^3/s"),
+         Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
+
+## set the allowable concentration
+allowable_concentration <- 126
+units(allowable_concentration) <- "cfu/100mL"
+
+list(5, 6, 7, 8, 9, "hd") %>%
+  purrr::map(~{
+    df <- calc_annual_ldc(df,
+                          Q = Flow,
+                          C = Indicator_Bacteria,
+                          Date = Date,
+                          allowable_concentration = allowable_concentration,
+                          estimator = .x,
+                          n = 1000)
+    df <- df$Q %>%
+      mutate(estimator = as.character(.x))
+    df
+  }) %>%
+  purrr::map_dfr(~ as_tibble(.x)) -> df
+
+ggplot(df) +
+  geom_line(aes(P_Exceedance, as.numeric(median_Q), color = estimator), alpha = 0.75) +
+  geom_ribbon(aes(x = P_Exceedance, 
+                  ymin = as.numeric(lwr.ci_Q), 
+                  ymax = as.numeric(upr.ci_Q), 
+                  fill = estimator, 
+                  color = estimator), 
+              alpha = 0.25, linetype = "dotted") +
+  facet_wrap(~estimator) +
+  scale_y_log10() + 
+  scale_x_log10() +
+  theme_light() +
+  labs(x= "Proportion of Flows Exceeded", y="Daily Discharge")
+
+```
+
+The x-axis is log transformed to highlight differences in the highest flow regimes. Methods 5 through 9 have minor differences in shape, although estimates are very close. The Harrell-Davis method results in a notably smoother estimated median and confidence interval.  
+
+# References
