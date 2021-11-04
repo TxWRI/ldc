@@ -47,13 +47,13 @@ $$
 The figure below shows the annual FDC resulting from each of the estimator methods:
 
 ```{r annualldcs, echo=FALSE}
-df <- as_tibble(tres_palacios) 
 
 ## load required packages
 library(units)
 library(dplyr)
 library(ggplot2)
 
+df <- as_tibble(tres_palacios)
 
 ## make the cfu unit
 install_unit("cfu")
