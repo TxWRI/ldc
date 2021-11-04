@@ -59,7 +59,9 @@ calc_annual_ldc <- function(.tbl,
   }
 
   if(!(estimator %in% c(5,6,7,8,9))) {
-    stop("'estimator' must be one of 'c(5,6,7,8,9)'")
+    if(estimator != "hd") {
+      stop("'estimator' must be one of 'c(5,6,7,8,9)' or 'hd'")
+    }
   }
 
   ## check that Q and C have units
@@ -97,16 +99,17 @@ calc_annual_ldc <- function(.tbl,
       Year = as.numeric(format(!! enquo(Date), "%Y"))) %>%
     group_by(.data$Year) %>%
     named_group_split(.data$Year) %>%
-    purrr::map(~annual_pp_estimator(.x$Flow),
+    purrr::map(~annual_pp_estimator(.x$Flow,
                n = n,
-               type = estimator) %>%
+               type = estimator)) %>%
     purrr::map_dfr( ~ tibble(Q = .x$Q,
                              pp = .x$pp),
                     .id = "Year") %>%
     mutate(Year = as.numeric(.data$Year)) %>%
     named_group_split(.data$pp) %>%
     purrr::map(~{
-      x <- DescTools::MedianCI(.x$Q)
+      x <- DescTools::MedianCI(.x$Q,
+                               conf.level = 0.90)
       tibble(median_Q = x["median"],
              lwr.ci_Q = x["lwr.ci"],
              upr.ci_Q = x["upr.ci"])
@@ -146,6 +149,11 @@ calc_annual_ldc <- function(.tbl,
            Flow_Category = cut(.data$P_Exceedance, breaks = breaks, labels = labels,
                                right = FALSE))
 
+  ## C measurements at extremely high or low flows might be outside of the prob range for annual median flows
+  ## not sure how to handle these points yet.
+  ## I think we can calculate the quantiles for the flow associated with the sample in a given year.
+  ## this wouldn't be as efficient but might be more logical.
+
   return(list(Q = q.ldc.tbl,C = c.ldc.tbl))
 
 
@@ -156,28 +164,39 @@ calc_annual_ldc <- function(.tbl,
 #'
 #' @param x numeric vector
 #' @param n output length
-#' @param type numeric, corresponds to types 5 through 9 in \code{quantile}
+#' @param type corresponds to types 5 through 9 in \code{quantile} or \code{'hd'} for the Harrel-Davis Distribution-Free Quantile estimator.
 #'
 #' @return tibble with variables Q and pp
 #' @keywords internal
 #' @noRd
 #' @importFrom stats quantile ppoints ecdf
+#' @importFrom Hmisc hdquantile
 #' @import dplyr rlang
-annual_pp_estimator <- function(x, n = 1000, type = 6) {
-  if (type == 5) a = 0.5
-  if (type == 6) a = 0 # weibull default
-  if (type == 7) a = 1
-  if (type == 8) a = 1/3
-  if (type == 9) a = 3/8
+annual_pp_estimator <- function(x, n, type = 6) {
+  if (is.numeric(type)) {
+    if (type == 5) a = 0.5
+    if (type == 6) a = 0 # weibull default
+    if (type == 7) a = 1
+    if (type == 8) a = 1/3
+    if (type == 9) a = 3/8
 
-  Fn <- ecdf(x)
-  probs <- ppoints(n = n, a = a)
-  p <- quantile(Fn, probs, type = type)
-  p <- p
-  pp <- names(p)
-  pp <- gsub("%", "", pp)
-  tibble(Q = p,
-         pp = 1-(as.numeric(pp)/100))
+    Fn <- ecdf(x)
+    probs <- ppoints(n = n, a = a)
+    p <- quantile(Fn, probs, type = type)
+    pp <- names(p)
+    pp <- gsub("%", "", pp)
+    return(tibble(Q = p,
+                  pp = 1-(as.numeric(pp)/100)))
+  }
+
+  if (type == "hd") {
+    probs <- ppoints(n)
+    p <- hdquantile(x, probs, se = FALSE, na.rm = FALSE, names = TRUE, weights = FALSE)
+    pp <- names(p)
+    return(tibble(Q = p,
+                  pp = 1-as.numeric(pp)))
+
+  }
 }
 
 
