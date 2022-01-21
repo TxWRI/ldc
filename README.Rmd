@@ -24,6 +24,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml)
 [![license](https://img.shields.io/badge/license-MIT + file LICENSE-lightgrey.svg)](https://choosealicense.com/)
 
+[![Codecov test coverage](https://codecov.io/gh/TxWRI/ldc/branch/main/graph/badge.svg)](https://app.codecov.io/gh/TxWRI/ldc?branch=main)
 <!-- badges: end -->
 
 ldc provides automated and fairly opinionated functions for generating pollutant load duration curves (LDCs) in freshwater streams. Due to the automated nature, there isn't much ability to adjust methodology or customize the generated LDCs since much of the calculation is abstracted away from the user.

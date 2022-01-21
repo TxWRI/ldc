@@ -8,3 +8,4 @@
 ^\.github$
 ^data-raw$
 ^vignettes/articles$
+^codecov\.yml$

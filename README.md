@@ -11,6 +11,8 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 [![R-CMD-check](https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml)
 [![license](https://img.shields.io/badge/license-MIT%20+%20file%20LICENSE-lightgrey.svg)](https://choosealicense.com/)
 
+[![Codecov test
+coverage](https://codecov.io/gh/TxWRI/ldc/branch/main/graph/badge.svg)](https://app.codecov.io/gh/TxWRI/ldc?branch=main)
 <!-- badges: end -->
 
 ldc provides automated and fairly opinionated functions for generating
@@ -105,16 +107,16 @@ df_ldc
 #> # A tibble: 7,671 x 9
 #>    site_no  Date           Flow Indicator_Bacteria Daily_Flow_Volume Daily_Load
 #>    <chr>    <date>     [ft^3/s]        [cfu/100mL]         [100mL/d]    [cfu/d]
-#>  1 08162600 2000-01-01     0.84                 NA         20551235.         NA
-#>  2 08162600 2000-01-02     3                    NA         73397266.         NA
-#>  3 08162600 2000-01-03     3.4                  NA         83183569.         NA
-#>  4 08162600 2000-01-04     2.6                  NA         63610964.         NA
-#>  5 08162600 2000-01-05     1.6                  NA         39145209.         NA
-#>  6 08162600 2000-01-06     3.2                  NA         78290417.         NA
-#>  7 08162600 2000-01-07    11                    NA        269123310.         NA
-#>  8 08162600 2000-01-08    17                    NA        415917843.         NA
-#>  9 08162600 2000-01-09    22                    NA        538246620.         NA
-#> 10 08162600 2000-01-10    18                    NA        440383598.         NA
+#>  1 08162600 2000-08-18     0.22                 NA          5382466.         NA
+#>  2 08162600 2000-03-07     0.42                 NA         10275617.         NA
+#>  3 08162600 2000-03-06     0.6                  NA         14679453.         NA
+#>  4 08162600 2000-08-22     0.75                 NA         18349317.         NA
+#>  5 08162600 2000-03-08     0.78                 NA         19083289.         NA
+#>  6 08162600 2000-08-17     0.78                 NA         19083289.         NA
+#>  7 08162600 2000-09-11     0.8                  NA         19572604.         NA
+#>  8 08162600 2000-01-01     0.84                 NA         20551235.         NA
+#>  9 08162600 2000-08-21     0.93                 NA         22753153.         NA
+#> 10 08162600 2000-03-05     1                    NA         24465755.         NA
 #> # ... with 7,661 more rows, and 3 more variables: Allowable_Daily_Load [cfu/d],
 #> #   P_Exceedance <dbl>, Flow_Category <fct>
 ```
@@ -130,11 +132,11 @@ df_sum <- summ_ldc(df_ldc,
                    method = "geomean")
 df_sum
 #> # A tibble: 3 x 6
-#>   Flow_Category Median_Flow Median_P   Geomean_C Median_Daily_Fl~ Median_Flow_Load
+#>   Flow_Category Median_Flow Median_P Geomean_C Median_Daily_Fl~ Median_Flow_Load
 #>   <fct>            [ft^3/s]    <dbl> [cfu/100mL]        [100mL/d]          [cfu/d]
-#> 1 High Flows          58.9     0.200       251.       1441032996.    362264512836.
-#> 2 Medium Flows        16.5     0.600        88.6       403684965.     35770057483.
-#> 3 Low Flows            8.66    0.900        67.1       211995771.     14229395256.
+#> 1 High Flows          58.9     0.200     259.       1441032996.    373699594298.
+#> 2 Medium Flows        16.5     0.600      83.6       403684965.     33764600228.
+#> 3 Low Flows            8.66    0.900      67.1       211995771.     14229395256.
 ```
 
 **Plot LDC**
@@ -166,11 +168,11 @@ df_sum %>%
   mutate(Median_Daily_Flow_Volume = set_units(Median_Daily_Flow_Volume, "1E6gallons/day")) -> df_sum
 df_sum
 #> # A tibble: 3 x 6
-#>   Flow_Category Median_Flow Median_P   Geomean_C Median_Daily_Fl~ Median_Flow_Load
+#>   Flow_Category Median_Flow Median_P Geomean_C Median_Daily_Fl~ Median_Flow_Load
 #>   <fct>            [ft^3/s]    <dbl> [cfu/100mL]   [1E6gallons/d]          [cfu/d]
-#> 1 High Flows          58.9     0.200       251.             38.1     362264512836.
-#> 2 Medium Flows        16.5     0.600        88.6            10.7      35770057483.
-#> 3 Low Flows            8.66    0.900        67.1             5.60     14229395256.
+#> 1 High Flows          58.9     0.200     259.             38.1     373699594298.
+#> 2 Medium Flows        16.5     0.600      83.6            10.7      33764600228.
+#> 3 Low Flows            8.66    0.900      67.1             5.60     14229395256.
 ```
 
 cfu/day is a really big number. We can convert that to billion cfu/day.
@@ -180,11 +182,11 @@ df_sum %>%
   mutate(Median_Flow_Load = set_units(Median_Flow_Load, "1E9cfu/day")) -> df_sum
 df_sum
 #> # A tibble: 3 x 6
-#>   Flow_Category Median_Flow Median_P   Geomean_C Median_Daily_Fl~ Median_Flow_Load
+#>   Flow_Category Median_Flow Median_P Geomean_C Median_Daily_Fl~ Median_Flow_Load
 #>   <fct>            [ft^3/s]    <dbl> [cfu/100mL]   [1E6gallons/d]       [1E9cfu/d]
-#> 1 High Flows          58.9     0.200       251.             38.1             362. 
-#> 2 Medium Flows        16.5     0.600        88.6            10.7              35.8
-#> 3 Low Flows            8.66    0.900        67.1             5.60             14.2
+#> 1 High Flows          58.9     0.200     259.             38.1             374. 
+#> 2 Medium Flows        16.5     0.600      83.6            10.7              33.8
+#> 3 Low Flows            8.66    0.900      67.1             5.60             14.2
 ```
 
 If we want to plot these, we also need to convert the df\_ldc variables
