@@ -1,12 +1,12 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   Introduction: Introduction.html
-  articles/exceedance: exceedance.html
-  articles/units: units.html
-last_built: 2021-11-04T19:42Z
+  exceedance: exceedance.html
+  units: units.html
+last_built: 2022-01-21T23:11Z
 urls:
-  reference: https://txwri.github.io/ldc//reference
-  article: https://txwri.github.io/ldc//articles
+  reference: https://txwri.github.io/ldc/reference
+  article: https://txwri.github.io/ldc/articles
 

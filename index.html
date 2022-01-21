@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,18 +36,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ldc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -60,17 +56,17 @@
       <a href="articles/Introduction.html">Introduction to ldc</a>
     </li>
     <li>
-      <a href="articles/articles/exceedance.html">Quantile Estimation Procedures</a>
+      <a href="articles/exceedance.html">Quantile Estimation Procedures</a>
     </li>
     <li>
-      <a href="articles/articles/units.html">Why Units</a>
+      <a href="articles/units.html">Why Units</a>
     </li>
   </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/TxWRI/ldc/">
+  <a href="https://github.com/TxWRI/ldc/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -87,12 +83,12 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="ldc" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#ldc" class="anchor"></a>ldc</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="ldc">ldc<a class="anchor" aria-label="anchor" href="#ldc"></a>
+</h1></div>
 <!-- badges: start -->
 
-<!-- badges: end -->
+<p><a href="https://app.codecov.io/gh/TxWRI/ldc?branch=main" class="external-link"><img src="https://codecov.io/gh/TxWRI/ldc/branch/main/graph/badge.svg" alt="Codecov test coverage"></a> <!-- badges: end --></p>
 <p>ldc provides automated and fairly opinionated functions for generating pollutant load duration curves (LDCs) in freshwater streams. Due to the automated nature, there isn’t much ability to adjust methodology or customize the generated LDCs since much of the calculation is abstracted away from the user.</p>
 <p>ldc has three major functions:</p>
 <ul>
@@ -100,41 +96,41 @@
 <li><p><code>summ_ldc</code> uses the output from <code>calc_ldc</code> to generate a summary dataframe</p></li>
 <li><p><code>draw_ldc</code> uses the output from both functions to generate a LDC figure as a ggplot object.</p></li>
 </ul>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>ldc is currently on Github. First install the remotes package then install ldc from Github:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"TxWRI/ldc"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
 <p>An example using the data in the ldc package is shown below.</p>
-<div id="setup-and-format-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#setup-and-format-data" class="anchor"></a>Setup and format data</h3>
+<div class="section level3">
+<h3 id="setup-and-format-data">Setup and format data<a class="anchor" aria-label="anchor" href="#setup-and-format-data"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/TxWRI/ldc">ldc</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units/">units</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/TxWRI/ldc" class="external-link">ldc</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units/" class="external-link">units</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="co">## optional packages</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">twriTemplates</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">twriTemplates</span><span class="op">)</span>
 
 <span class="co">## this will calculate a ldc for indicator bacteria</span>
 
 <span class="co">## ldc uses the unit package to facilitate unit conversions</span>
 <span class="co">## we need to make the cfu unit first, since it isn't included </span>
 <span class="co">## in the units package</span>
-<span class="fu"><a href="https://rdrr.io/pkg/units/man/install_unit.html">install_unit</a></span><span class="op">(</span><span class="st">"cfu"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/units/man/install_unit.html" class="external-link">install_unit</a></span><span class="op">(</span><span class="st">"cfu"</span><span class="op">)</span>
 
 <span class="co">## format the data for use in ldc</span>
-<span class="va">tres_palacios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">tres_palacios</span><span class="op">)</span> <span class="op"><a href="reference/%&gt;%.html">%&gt;%</a></span>
+<span class="va">tres_palacios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">tres_palacios</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
   <span class="co">## flow must have units, here is is in cfs</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Flow</span>, <span class="st">"ft^3/s"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Flow</span>, <span class="st">"ft^3/s"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
   <span class="co">## pollutant concentration must have units</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Indicator_Bacteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span>, <span class="st">"cfu/100mL"</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Indicator_Bacteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span>, <span class="st">"cfu/100mL"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">tres_palacios</span>
 <span class="co">#&gt; # A tibble: 7,671 x 4</span>
@@ -156,7 +152,7 @@
 <code class="sourceCode R"><span class="co">## specify the allowable concentration</span>
 <span class="va">allowable_concentration</span> <span class="op">&lt;-</span> <span class="fl">126</span>
 <span class="co">## set the units</span>
-<span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">units</a></span><span class="op">(</span><span class="va">allowable_concentration</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cfu/100mL"</span>
+<span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">units</a></span><span class="op">(</span><span class="va">allowable_concentration</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cfu/100mL"</span>
 
 <span class="co">## calculate the exceedance probabilities along with</span>
 <span class="co">## allowable pollutant loads and measured pollutant loads</span>
@@ -170,16 +166,16 @@
 <span class="co">#&gt; # A tibble: 7,671 x 9</span>
 <span class="co">#&gt;    site_no  Date           Flow Indicator_Bacteria Daily_Flow_Volume Daily_Load</span>
 <span class="co">#&gt;    &lt;chr&gt;    &lt;date&gt;     [ft^3/s]        [cfu/100mL]         [100mL/d]    [cfu/d]</span>
-<span class="co">#&gt;  1 08162600 2000-01-01     0.84                 NA         20551235.         NA</span>
-<span class="co">#&gt;  2 08162600 2000-01-02     3                    NA         73397266.         NA</span>
-<span class="co">#&gt;  3 08162600 2000-01-03     3.4                  NA         83183569.         NA</span>
-<span class="co">#&gt;  4 08162600 2000-01-04     2.6                  NA         63610964.         NA</span>
-<span class="co">#&gt;  5 08162600 2000-01-05     1.6                  NA         39145209.         NA</span>
-<span class="co">#&gt;  6 08162600 2000-01-06     3.2                  NA         78290417.         NA</span>
-<span class="co">#&gt;  7 08162600 2000-01-07    11                    NA        269123310.         NA</span>
-<span class="co">#&gt;  8 08162600 2000-01-08    17                    NA        415917843.         NA</span>
-<span class="co">#&gt;  9 08162600 2000-01-09    22                    NA        538246620.         NA</span>
-<span class="co">#&gt; 10 08162600 2000-01-10    18                    NA        440383598.         NA</span>
+<span class="co">#&gt;  1 08162600 2000-08-18     0.22                 NA          5382466.         NA</span>
+<span class="co">#&gt;  2 08162600 2000-03-07     0.42                 NA         10275617.         NA</span>
+<span class="co">#&gt;  3 08162600 2000-03-06     0.6                  NA         14679453.         NA</span>
+<span class="co">#&gt;  4 08162600 2000-08-22     0.75                 NA         18349317.         NA</span>
+<span class="co">#&gt;  5 08162600 2000-03-08     0.78                 NA         19083289.         NA</span>
+<span class="co">#&gt;  6 08162600 2000-08-17     0.78                 NA         19083289.         NA</span>
+<span class="co">#&gt;  7 08162600 2000-09-11     0.8                  NA         19572604.         NA</span>
+<span class="co">#&gt;  8 08162600 2000-01-01     0.84                 NA         20551235.         NA</span>
+<span class="co">#&gt;  9 08162600 2000-08-21     0.93                 NA         22753153.         NA</span>
+<span class="co">#&gt; 10 08162600 2000-03-05     1                    NA         24465755.         NA</span>
 <span class="co">#&gt; # ... with 7,661 more rows, and 3 more variables: Allowable_Daily_Load [cfu/d],</span>
 <span class="co">#&gt; #   P_Exceedance &lt;dbl&gt;, Flow_Category &lt;fct&gt;</span></code></pre></div>
 <p><strong>Summarize data</strong></p>
@@ -192,64 +188,64 @@
                    method <span class="op">=</span> <span class="st">"geomean"</span><span class="op">)</span>
 <span class="va">df_sum</span>
 <span class="co">#&gt; # A tibble: 3 x 6</span>
-<span class="co">#&gt;   Flow_Category Median_Flow Median_P   Geomean_C Median_Daily_Fl~ Median_Flow_Load</span>
+<span class="co">#&gt;   Flow_Category Median_Flow Median_P Geomean_C Median_Daily_Fl~ Median_Flow_Load</span>
 <span class="co">#&gt;   &lt;fct&gt;            [ft^3/s]    &lt;dbl&gt; [cfu/100mL]        [100mL/d]          [cfu/d]</span>
-<span class="co">#&gt; 1 High Flows          58.9     0.200       251.       1441032996.    362264512836.</span>
-<span class="co">#&gt; 2 Medium Flows        16.5     0.600        88.6       403684965.     35770057483.</span>
-<span class="co">#&gt; 3 Low Flows            8.66    0.900        67.1       211995771.     14229395256.</span></code></pre></div>
+<span class="co">#&gt; 1 High Flows          58.9     0.200     259.       1441032996.    373699594298.</span>
+<span class="co">#&gt; 2 Medium Flows        16.5     0.600      83.6       403684965.     33764600228.</span>
+<span class="co">#&gt; 3 Low Flows            8.66    0.900      67.1       211995771.     14229395256.</span></code></pre></div>
 <p><strong>Plot LDC</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/draw_ldc.html">draw_ldc</a></span><span class="op">(</span><span class="va">df_ldc</span>, 
          <span class="va">df_sum</span>, 
-         y_lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">italic</a></span><span class="op">(</span><span class="st">"E. coli"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-         label_nudge_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotation_logticks.html">annotation_logticks</a></span><span class="op">(</span>sides <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span> <span class="op">+</span>
+         y_lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html" class="external-link">italic</a></span><span class="op">(</span><span class="st">"E. coli"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+         label_nudge_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotation_logticks.html" class="external-link">annotation_logticks</a></span><span class="op">(</span>sides <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">twriTemplates</span><span class="fu">::</span><span class="fu">theme_TWRI_print</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
         legend.direction <span class="op">=</span> <span class="st">"vertical"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-ldcplot-1.png" width="100%"></p>
 </div>
-<div id="units" class="section level3">
-<h3 class="hasAnchor">
-<a href="#units" class="anchor"></a>Units</h3>
+<div class="section level3">
+<h3 id="units">Units<a class="anchor" aria-label="anchor" href="#units"></a>
+</h3>
 <p>ldc relies on the units package to facilitate unit conversions and tracking of units across variables. This is handy if we want to transform units on the fly. In the above summary table, median daily flow volume is reported in units of 100mL/day. This isn’t a logical unit to communicate, lets change it to million. gallons/day.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df_sum</span> <span class="op"><a href="reference/%&gt;%.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Median_Daily_Flow_Volume <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Median_Daily_Flow_Volume</span>, <span class="st">"1E6gallons/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_sum</span>
+<code class="sourceCode R"><span class="va">df_sum</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Median_Daily_Flow_Volume <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Median_Daily_Flow_Volume</span>, <span class="st">"1E6gallons/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_sum</span>
 <span class="va">df_sum</span>
 <span class="co">#&gt; # A tibble: 3 x 6</span>
-<span class="co">#&gt;   Flow_Category Median_Flow Median_P   Geomean_C Median_Daily_Fl~ Median_Flow_Load</span>
+<span class="co">#&gt;   Flow_Category Median_Flow Median_P Geomean_C Median_Daily_Fl~ Median_Flow_Load</span>
 <span class="co">#&gt;   &lt;fct&gt;            [ft^3/s]    &lt;dbl&gt; [cfu/100mL]   [1E6gallons/d]          [cfu/d]</span>
-<span class="co">#&gt; 1 High Flows          58.9     0.200       251.             38.1     362264512836.</span>
-<span class="co">#&gt; 2 Medium Flows        16.5     0.600        88.6            10.7      35770057483.</span>
-<span class="co">#&gt; 3 Low Flows            8.66    0.900        67.1             5.60     14229395256.</span></code></pre></div>
+<span class="co">#&gt; 1 High Flows          58.9     0.200     259.             38.1     373699594298.</span>
+<span class="co">#&gt; 2 Medium Flows        16.5     0.600      83.6            10.7      33764600228.</span>
+<span class="co">#&gt; 3 Low Flows            8.66    0.900      67.1             5.60     14229395256.</span></code></pre></div>
 <p>cfu/day is a really big number. We can convert that to billion cfu/day.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df_sum</span> <span class="op"><a href="reference/%&gt;%.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Median_Flow_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Median_Flow_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_sum</span>
+<code class="sourceCode R"><span class="va">df_sum</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Median_Flow_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Median_Flow_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_sum</span>
 <span class="va">df_sum</span>
 <span class="co">#&gt; # A tibble: 3 x 6</span>
-<span class="co">#&gt;   Flow_Category Median_Flow Median_P   Geomean_C Median_Daily_Fl~ Median_Flow_Load</span>
+<span class="co">#&gt;   Flow_Category Median_Flow Median_P Geomean_C Median_Daily_Fl~ Median_Flow_Load</span>
 <span class="co">#&gt;   &lt;fct&gt;            [ft^3/s]    &lt;dbl&gt; [cfu/100mL]   [1E6gallons/d]       [1E9cfu/d]</span>
-<span class="co">#&gt; 1 High Flows          58.9     0.200       251.             38.1             362. </span>
-<span class="co">#&gt; 2 Medium Flows        16.5     0.600        88.6            10.7              35.8</span>
-<span class="co">#&gt; 3 Low Flows            8.66    0.900        67.1             5.60             14.2</span></code></pre></div>
+<span class="co">#&gt; 1 High Flows          58.9     0.200     259.             38.1             374. </span>
+<span class="co">#&gt; 2 Medium Flows        16.5     0.600      83.6            10.7              33.8</span>
+<span class="co">#&gt; 3 Low Flows            8.66    0.900      67.1             5.60             14.2</span></code></pre></div>
 <p>If we want to plot these, we also need to convert the df_ldc variables to matching units.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df_ldc</span> <span class="op"><a href="reference/%&gt;%.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Daily_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Daily_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span>,
-         Allowable_Daily_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">Allowable_Daily_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_ldc</span></code></pre></div>
+<code class="sourceCode R"><span class="va">df_ldc</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Daily_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Daily_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span>,
+         Allowable_Daily_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Allowable_Daily_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_ldc</span></code></pre></div>
 <p>Updated units will carry over to the plot:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/draw_ldc.html">draw_ldc</a></span><span class="op">(</span><span class="va">df_ldc</span>, 
          <span class="va">df_sum</span>, 
-         y_lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">italic</a></span><span class="op">(</span><span class="st">"E. coli"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-         label_nudge_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotation_logticks.html">annotation_logticks</a></span><span class="op">(</span>sides <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span> <span class="op">+</span>
+         y_lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html" class="external-link">italic</a></span><span class="op">(</span><span class="st">"E. coli"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+         label_nudge_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotation_logticks.html" class="external-link">annotation_logticks</a></span><span class="op">(</span>sides <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">twriTemplates</span><span class="fu">::</span><span class="fu">theme_TWRI_print</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
         legend.direction <span class="op">=</span> <span class="st">"vertical"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-ldcplot2-1.png" width="100%"></p>
 </div>
@@ -259,47 +255,58 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/TxWRI/ldc/">https://​github.com/​TxWRI/​ldc/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/TxWRI/ldc/issues">https://​github.com/​TxWRI/​ldc/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Michael Schramm <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1876-6592" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://github.com/TxWRI/ldc/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/TxWRI/ldc/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.repostatus.org/#wip"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public."></a></li>
-<li><a href="https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml"><img src="https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://choosealicense.com/"><img src="https://img.shields.io/badge/license-MIT%20+%20file%20LICENSE-lightgrey.svg" alt="license"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing ldc</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Michael Schramm <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1876-6592" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.repostatus.org/#wip" class="external-link"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public."></a></li>
+<li><a href="https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml" class="external-link"><img src="https://github.com/TxWRI/ldc/actions/workflows/check-standard.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://choosealicense.com/" class="external-link"><img src="https://img.shields.io/badge/license-MIT%20+%20file%20LICENSE-lightgrey.svg" alt="license"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Michael Schramm.</p>
+  <p></p>
+<p>Developed by Michael Schramm.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -307,6 +314,8 @@
 
   
 
+
+  
 
   </body>
 </html>
