@@ -99,18 +99,22 @@ calc_ldc <- function(.tbl,
 
   ## get concentration denominator
   C_den <- units(.tbl[[substitute(C)]])$denominator
+  allowable_concentration_den <- units(allowable_concentration)$denominator
 
   ## if length is zero, then it is not a concentration
   if(length(C_den) == 0) {
     stop(paste0(as_name(enquo(C)),
                 " does not have valid units, it is missing a denominator"))
   }
+  if(length(allowable_concentration_den) == 0) {
+    stop("'allowable_concentration' does not have valid units, it is missing a denominator")
+  }
 
   ## daily volume units based on concentration
   fv_units <- as_units(paste0(C_den, "/day"))
 
   .tbl %>%
-    as_tibble(.tbl) %>%
+    as_tibble() %>%
     arrange(!! enquo(Q)) %>%
     mutate(
       ## daily flow in units of the concentration denominator
@@ -155,18 +159,5 @@ p_estimator <- function(Q,
 
   return(pp)
 
-
-}
-
-wb_pp <- function(x) {
-
-  r <- rank(-x,
-            na.last = NA,
-            ties.method = "first")
-  n <- length(x)
-
-  pp <- r/(n+1)
-
-  return(pp)
 
 }
