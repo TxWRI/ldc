@@ -53,8 +53,6 @@ library(ldc)
 library(dplyr)
 library(units)
 library(ggplot2)
-## optional packages
-library(twriTemplates)
 
 ## this will calculate a ldc for indicator bacteria
 
@@ -148,9 +146,11 @@ draw_ldc(df_ldc,
          label_nudge_y = log10(1000)) + 
   scale_y_log10() +
   annotation_logticks(sides = "l") +
-  twriTemplates::theme_TWRI_print() +
-  theme(legend.title = element_blank(),
-        legend.direction = "vertical")
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical",
+        panel.grid = element_blank())
 ```
 
 <img src="man/figures/README-ldcplot-1.png" width="100%" />
@@ -207,9 +207,11 @@ draw_ldc(df_ldc,
          label_nudge_y = log10(1000)) + 
   scale_y_log10() +
   annotation_logticks(sides = "l") +
-  twriTemplates::theme_TWRI_print() +
-  theme(legend.title = element_blank(),
-        legend.direction = "vertical")
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical",
+        panel.grid = element_blank())
 ```
 
 <img src="man/figures/README-ldcplot2-1.png" width="100%" />
