@@ -93,12 +93,223 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/TxWRI/ldc" class="external-link">ldc</a></span><span class="op">)</span></code></pre></div>
-<p><strong>Placeholder</strong></p>
+<div class="section level2">
+<h2 id="introduction-to-units">Introduction to Units<a class="anchor" aria-label="anchor" href="#introduction-to-units"></a>
+</h2>
+<p>ldc relies on the <a href="https://r-quantities.github.io/units/index.html" class="external-link">units</a> package to facilitate unit conversions and tracking of units across variables. This is handy if we want to transform units on the fly. I suggest briefly reviewing the <a href="https://r-quantities.github.io/units/articles/measurement_units_in_R.html#handling-data-with-units-in-r-the-units-package" class="external-link">units package documentation</a> to become familiar with how units objects are handled. A brief example is shown below:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units/" class="external-link">units</a></span><span class="op">)</span>
+<span class="co">#&gt; udunits database from /usr/share/xml/udunits/udunits2.xml</span>
+<span class="co">## generate random data</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, meanlog <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, sdlog <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">## attach units, cubic feet per second</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"ft^3/s"</span><span class="op">)</span>
+<span class="va">x</span>
+<span class="co">#&gt; Units: [ft^3/s]</span>
+<span class="co">#&gt;   [1] 2.023560e+01 2.608523e+03 3.312524e+03 3.317604e+01 2.950533e+00</span>
+<span class="co">#&gt;   [6] 8.599740e+02 1.642472e+04 1.088207e+03 1.430528e+01 1.150638e+01</span>
+<span class="co">#&gt;  [11] 3.879172e+02 2.652154e+01 1.793561e+02 2.603726e+01 2.959461e+01</span>
+<span class="co">#&gt;  [16] 1.348817e+04 8.764529e+01 4.196290e+01 4.470503e+02 1.450761e+03</span>
+<span class="co">#&gt;  [21] 4.134901e+02 2.621091e+00 5.355766e+03 6.614119e+01 4.527657e+00</span>
+<span class="co">#&gt;  [26] 1.068277e+01 4.806433e+00 2.091338e+00 5.022147e+02 2.362998e+02</span>
+<span class="co">#&gt;  [31] 1.445545e+03 2.907366e+01 3.776319e+02 1.183151e+01 2.811514e+00</span>
+<span class="co">#&gt;  [36] 2.444972e+02 3.372015e+01 1.520378e+01 4.649219e+02 1.783216e+02</span>
+<span class="co">#&gt;  [41] 1.506162e+00 2.764443e+03 1.214095e+03 7.054125e+01 1.695514e+02</span>
+<span class="co">#&gt;  [46] 1.028688e+00 1.515067e+02 1.156141e+03 4.947819e+00 2.174842e+00</span>
+<span class="co">#&gt;  [51] 3.633372e+01 3.220690e+01 7.313852e+02 4.300250e+02 5.895149e+01</span>
+<span class="co">#&gt;  [56] 7.609113e-01 1.008119e+03 8.725367e+02 2.784651e+01 7.266846e+00</span>
+<span class="co">#&gt;  [61] 2.004354e+03 1.303137e+02 3.907920e+02 7.173164e+01 3.783813e+01</span>
+<span class="co">#&gt;  [66] 7.596066e+03 6.438771e+00 5.661722e+00 3.072826e+02 1.770326e+04</span>
+<span class="co">#&gt;  [71] 8.382456e+02 1.068121e+01 3.214015e+00 6.178418e+02 6.686442e+00</span>
+<span class="co">#&gt;  [76] 4.205244e+02 5.612940e+01 8.086835e+02 6.695469e+01 1.578587e+02</span>
+<span class="co">#&gt;  [81] 1.465276e+02 1.473067e+04 1.537622e+03 1.012361e-01 1.637506e+00</span>
+<span class="co">#&gt;  [86] 5.731607e+00 3.882373e+02 2.582206e+02 8.445405e+02 9.213815e+02</span>
+<span class="co">#&gt;  [91] 5.295920e+02 2.636938e+00 1.139278e+02 2.862176e+02 1.273497e+02</span>
+<span class="co">#&gt;  [96] 1.750415e+02 2.866540e+02 9.851353e+01 3.029501e+02 1.675946e+04</span></code></pre></div>
+<p>x is a object of type units which can be used with most R expressions:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span> <span class="op">*</span> <span class="fl">86400</span>
+<span class="co">#&gt; Units: [ft^3/s]</span>
+<span class="co">#&gt;   [1] 1.748356e+06 2.253764e+08 2.862020e+08 2.866410e+06 2.549260e+05</span>
+<span class="co">#&gt;   [6] 7.430175e+07 1.419096e+09 9.402108e+07 1.235977e+06 9.941510e+05</span>
+<span class="co">#&gt;  [11] 3.351604e+07 2.291461e+06 1.549637e+07 2.249619e+06 2.556975e+06</span>
+<span class="co">#&gt;  [16] 1.165377e+09 7.572553e+06 3.625594e+06 3.862514e+07 1.253458e+08</span>
+<span class="co">#&gt;  [21] 3.572554e+07 2.264623e+05 4.627382e+08 5.714599e+06 3.911896e+05</span>
+<span class="co">#&gt;  [26] 9.229914e+05 4.152758e+05 1.806916e+05 4.339135e+07 2.041630e+07</span>
+<span class="co">#&gt;  [31] 1.248951e+08 2.511965e+06 3.262740e+07 1.022242e+06 2.429148e+05</span>
+<span class="co">#&gt;  [36] 2.112456e+07 2.913421e+06 1.313607e+06 4.016925e+07 1.540699e+07</span>
+<span class="co">#&gt;  [41] 1.301324e+05 2.388479e+08 1.048978e+08 6.094764e+06 1.464924e+07</span>
+<span class="co">#&gt;  [46] 8.887867e+04 1.309018e+07 9.989056e+07 4.274916e+05 1.879064e+05</span>
+<span class="co">#&gt;  [51] 3.139234e+06 2.782676e+06 6.319168e+07 3.715416e+07 5.093408e+06</span>
+<span class="co">#&gt;  [56] 6.574274e+04 8.710151e+07 7.538717e+07 2.405939e+06 6.278555e+05</span>
+<span class="co">#&gt;  [61] 1.731762e+08 1.125910e+07 3.376443e+07 6.197614e+06 3.269214e+06</span>
+<span class="co">#&gt;  [66] 6.563001e+08 5.563098e+05 4.891728e+05 2.654922e+07 1.529561e+09</span>
+<span class="co">#&gt;  [71] 7.242442e+07 9.228568e+05 2.776909e+05 5.338153e+07 5.777086e+05</span>
+<span class="co">#&gt;  [76] 3.633331e+07 4.849580e+06 6.987025e+07 5.784885e+06 1.363899e+07</span>
+<span class="co">#&gt;  [81] 1.265998e+07 1.272730e+09 1.328505e+08 8.746801e+03 1.414805e+05</span>
+<span class="co">#&gt;  [86] 4.952108e+05 3.354370e+07 2.231026e+07 7.296830e+07 7.960736e+07</span>
+<span class="co">#&gt;  [91] 4.575675e+07 2.278314e+05 9.843365e+06 2.472920e+07 1.100301e+07</span>
+<span class="co">#&gt;  [96] 1.512359e+07 2.476690e+07 8.511569e+06 2.617489e+07 1.448017e+09</span></code></pre></div>
+<p>The units can be converted:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## convert to cubic feet per day</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"ft^3/d"</span><span class="op">)</span>
+<span class="va">x</span>
+<span class="co">#&gt; Units: [ft^3/d]</span>
+<span class="co">#&gt;   [1] 1.748356e+06 2.253764e+08 2.862020e+08 2.866410e+06 2.549260e+05</span>
+<span class="co">#&gt;   [6] 7.430175e+07 1.419096e+09 9.402108e+07 1.235977e+06 9.941510e+05</span>
+<span class="co">#&gt;  [11] 3.351604e+07 2.291461e+06 1.549637e+07 2.249619e+06 2.556975e+06</span>
+<span class="co">#&gt;  [16] 1.165377e+09 7.572553e+06 3.625594e+06 3.862514e+07 1.253458e+08</span>
+<span class="co">#&gt;  [21] 3.572554e+07 2.264623e+05 4.627382e+08 5.714599e+06 3.911896e+05</span>
+<span class="co">#&gt;  [26] 9.229914e+05 4.152758e+05 1.806916e+05 4.339135e+07 2.041630e+07</span>
+<span class="co">#&gt;  [31] 1.248951e+08 2.511965e+06 3.262740e+07 1.022242e+06 2.429148e+05</span>
+<span class="co">#&gt;  [36] 2.112456e+07 2.913421e+06 1.313607e+06 4.016925e+07 1.540699e+07</span>
+<span class="co">#&gt;  [41] 1.301324e+05 2.388479e+08 1.048978e+08 6.094764e+06 1.464924e+07</span>
+<span class="co">#&gt;  [46] 8.887867e+04 1.309018e+07 9.989056e+07 4.274916e+05 1.879064e+05</span>
+<span class="co">#&gt;  [51] 3.139234e+06 2.782676e+06 6.319168e+07 3.715416e+07 5.093408e+06</span>
+<span class="co">#&gt;  [56] 6.574274e+04 8.710151e+07 7.538717e+07 2.405939e+06 6.278555e+05</span>
+<span class="co">#&gt;  [61] 1.731762e+08 1.125910e+07 3.376443e+07 6.197614e+06 3.269214e+06</span>
+<span class="co">#&gt;  [66] 6.563001e+08 5.563098e+05 4.891728e+05 2.654922e+07 1.529561e+09</span>
+<span class="co">#&gt;  [71] 7.242442e+07 9.228568e+05 2.776909e+05 5.338153e+07 5.777086e+05</span>
+<span class="co">#&gt;  [76] 3.633331e+07 4.849580e+06 6.987025e+07 5.784885e+06 1.363899e+07</span>
+<span class="co">#&gt;  [81] 1.265998e+07 1.272730e+09 1.328505e+08 8.746801e+03 1.414805e+05</span>
+<span class="co">#&gt;  [86] 4.952108e+05 3.354370e+07 2.231026e+07 7.296830e+07 7.960736e+07</span>
+<span class="co">#&gt;  [91] 4.575675e+07 2.278314e+05 9.843365e+06 2.472920e+07 1.100301e+07</span>
+<span class="co">#&gt;  [96] 1.512359e+07 2.476690e+07 8.511569e+06 2.617489e+07 1.448017e+09</span></code></pre></div>
+<p>Units can be plotted:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## convert to million gallons per day</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"1E6gallons/day"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+<p><img src="units_files/figure-html/unitshistbase-1.png" width="700"></p>
+<p>The <a href="https://ggforce.data-imaginist.com/" class="external-link">ggforce</a> package is required to handle plotting units in ggplot2:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggforce.data-imaginist.com" class="external-link">ggforce</a></span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, binwidth <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> </code></pre></div>
+<p><img src="units_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="units-with-ldc">Units with ldc<a class="anchor" aria-label="anchor" href="#units-with-ldc"></a>
+</h2>
+<p>Stream loads are measured in pounds or kilograms per day for pollutants such as nutrients and sediment. Fecal bacteria loads are typically in colony forming units (cfu) or most probable number (MPN) per day. The included <code>tres_palacios</code> dataset includes bacteria and flow measurements from the Tres Palacios river. Bacteria measurements will need to units in “cfu/100mL” and flow should be in “cubic feet per second.”</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+
+<span class="co">## create a cfu unit. it is a simple count, so we just add it as an arbitrary unit.</span>
+<span class="fu"><a href="https://rdrr.io/pkg/units/man/install_unit.html" class="external-link">install_unit</a></span><span class="op">(</span><span class="st">"cfu"</span><span class="op">)</span>
+
+<span class="co">## format the data for use in ldc</span>
+<span class="va">tres_palacios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">tres_palacios</span><span class="op">)</span> |&gt;
+  <span class="co">## flow must have units, here is is in cfs</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Flow</span>, <span class="st">"ft^3/s"</span><span class="op">)</span><span class="op">)</span>|&gt;
+  <span class="co">## pollutant concentration must have units</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Indicator_Bacteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span>, <span class="st">"cfu/100mL"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">tres_palacios</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 7,671 × 4</span></span>
+<span class="co">#&gt;    site_no  Date           Flow Indicator_Bacteria</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494;">[ft^3/s]</span>        <span style="color: #949494;">[cfu/100mL]</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 08162600 2000-01-01     0.84                 <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 08162600 2000-01-02     3                    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 08162600 2000-01-03     3.4                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 08162600 2000-01-04     2.6                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 08162600 2000-01-05     1.6                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 08162600 2000-01-06     3.2                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 08162600 2000-01-07    11                    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 08162600 2000-01-08    17                    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 08162600 2000-01-09    22                    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 08162600 2000-01-10    18                    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 7,661 more rows</span></span></code></pre></div>
+<p>The tibble above shows the correct units in each column. What if we want to use metric units for flow?</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tres_palacios</span> <span class="op">&lt;-</span> <span class="va">tres_palacios</span> |&gt;
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Flow</span>, <span class="st">"m^3/s"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">tres_palacios</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 7,671 × 4</span></span>
+<span class="co">#&gt;    site_no  Date          Flow Indicator_Bacteria</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494;">[m^3/s]</span>        <span style="color: #949494;">[cfu/100mL]</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 08162600 2000-01-01  0.023<span style="text-decoration: underline;">8</span>                 <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 08162600 2000-01-02  0.085<span style="text-decoration: underline;">0</span>                 <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 08162600 2000-01-03  0.096<span style="text-decoration: underline;">3</span>                 <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 08162600 2000-01-04  0.073<span style="text-decoration: underline;">6</span>                 <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 08162600 2000-01-05  0.045<span style="text-decoration: underline;">3</span>                 <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 08162600 2000-01-06  0.090<span style="text-decoration: underline;">6</span>                 <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 08162600 2000-01-07  0.311                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 08162600 2000-01-08  0.481                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 08162600 2000-01-09  0.623                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 08162600 2000-01-10  0.510                  <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 7,661 more rows</span></span></code></pre></div>
+<p>Now we can calculate the flow and load exceedance probabilities using <code><a href="../reference/calc_ldc.html">calc_ldc()</a></code>. Q and C arguments must have units attached and C must be a concentration unit (mass or counts divided by volume).</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co">## specify the allowable concentration</span>
+<span class="va">allowable_concentration</span> <span class="op">&lt;-</span> <span class="fl">126</span>
+<span class="co">## set the units</span>
+<span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">units</a></span><span class="op">(</span><span class="va">allowable_concentration</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"cfu/100mL"</span>
+
+<span class="co">## calculate the exceedance probabilities along with</span>
+<span class="co">## allowable pollutant loads and measured pollutant loads</span>
+<span class="co">## at given probabilities</span>
+<span class="va">df_ldc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_ldc.html">calc_ldc</a></span><span class="op">(</span><span class="va">tres_palacios</span>, 
+                   Q <span class="op">=</span> <span class="va">Flow</span>, 
+                   C <span class="op">=</span> <span class="va">Indicator_Bacteria</span>, 
+                   allowable_concentration <span class="op">=</span> <span class="va">allowable_concentration</span><span class="op">)</span>
+
+<span class="va">df_ldc</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 7,671 × 9</span></span>
+<span class="co">#&gt;    site_no  Date          Flow Indicator_Bacteria Daily_Flow_Volume Daily_Load</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494;">[m^3/s]</span>        <span style="color: #949494;">[cfu/100mL]</span>         <span style="color: #949494;">[100mL/d]</span>    <span style="color: #949494;">[cfu/d]</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 08162600 2000-08-18 0.006<span style="text-decoration: underline;">23</span>                 <span style="color: #BB0000;">NA</span>          5<span style="text-decoration: underline;">382</span>466.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 08162600 2000-03-07 0.011<span style="text-decoration: underline;">9</span>                  <span style="color: #BB0000;">NA</span>         10<span style="text-decoration: underline;">275</span>617.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 08162600 2000-03-06 0.017<span style="text-decoration: underline;">0</span>                  <span style="color: #BB0000;">NA</span>         14<span style="text-decoration: underline;">679</span>453.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 08162600 2000-08-22 0.021<span style="text-decoration: underline;">2</span>                  <span style="color: #BB0000;">NA</span>         18<span style="text-decoration: underline;">349</span>317.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 08162600 2000-03-08 0.022<span style="text-decoration: underline;">1</span>                  <span style="color: #BB0000;">NA</span>         19<span style="text-decoration: underline;">083</span>289.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 08162600 2000-08-17 0.022<span style="text-decoration: underline;">1</span>                  <span style="color: #BB0000;">NA</span>         19<span style="text-decoration: underline;">083</span>289.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 08162600 2000-09-11 0.022<span style="text-decoration: underline;">7</span>                  <span style="color: #BB0000;">NA</span>         19<span style="text-decoration: underline;">572</span>604.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 08162600 2000-01-01 0.023<span style="text-decoration: underline;">8</span>                  <span style="color: #BB0000;">NA</span>         20<span style="text-decoration: underline;">551</span>235.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 08162600 2000-08-21 0.026<span style="text-decoration: underline;">3</span>                  <span style="color: #BB0000;">NA</span>         22<span style="text-decoration: underline;">753</span>153.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 08162600 2000-03-05 0.028<span style="text-decoration: underline;">3</span>                  <span style="color: #BB0000;">NA</span>         24<span style="text-decoration: underline;">465</span>755.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 7,661 more rows, and 3 more variables: Allowable_Daily_Load [cfu/d],</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   P_Exceedance &lt;dbl&gt;, Flow_Category &lt;fct&gt;</span></span></code></pre></div>
+<p>Now we have the percent exceedance for daily flow, flow volume, and allowable daily loads. The daily flow volume and daily load volume are huge numbers, so it might make sense to convert those units.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df_ldc</span> |&gt;
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Daily_Flow_Volume <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Daily_Flow_Volume</span>, <span class="st">"m^3/day"</span><span class="op">)</span>,
+         Allowable_Daily_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Allowable_Daily_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 7,671 × 9</span></span>
+<span class="co">#&gt;    site_no  Date          Flow Indicator_Bacteria Daily_Flow_Volume Daily_Load</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494;">[m^3/s]</span>        <span style="color: #949494;">[cfu/100mL]</span>           <span style="color: #949494;">[m^3/d]</span>    <span style="color: #949494;">[cfu/d]</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 08162600 2000-08-18 0.006<span style="text-decoration: underline;">23</span>                 <span style="color: #BB0000;">NA</span>              538.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 08162600 2000-03-07 0.011<span style="text-decoration: underline;">9</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">1</span>028.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 08162600 2000-03-06 0.017<span style="text-decoration: underline;">0</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">1</span>468.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 08162600 2000-08-22 0.021<span style="text-decoration: underline;">2</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">1</span>835.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 08162600 2000-03-08 0.022<span style="text-decoration: underline;">1</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">1</span>908.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 08162600 2000-08-17 0.022<span style="text-decoration: underline;">1</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">1</span>908.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 08162600 2000-09-11 0.022<span style="text-decoration: underline;">7</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">1</span>957.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 08162600 2000-01-01 0.023<span style="text-decoration: underline;">8</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">2</span>055.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 08162600 2000-08-21 0.026<span style="text-decoration: underline;">3</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">2</span>275.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 08162600 2000-03-05 0.028<span style="text-decoration: underline;">3</span>                  <span style="color: #BB0000;">NA</span>             <span style="text-decoration: underline;">2</span>447.         <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 7,661 more rows, and 3 more variables:</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   Allowable_Daily_Load [1E9cfu/d], P_Exceedance &lt;dbl&gt;, Flow_Category &lt;fct&gt;</span></span></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

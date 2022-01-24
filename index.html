@@ -115,8 +115,6 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units/" class="external-link">units</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="co">## optional packages</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">twriTemplates</span><span class="op">)</span>
 
 <span class="co">## this will calculate a ldc for indicator bacteria</span>
 
@@ -126,9 +124,9 @@
 <span class="fu"><a href="https://rdrr.io/pkg/units/man/install_unit.html" class="external-link">install_unit</a></span><span class="op">(</span><span class="st">"cfu"</span><span class="op">)</span>
 
 <span class="co">## format the data for use in ldc</span>
-<span class="va">tres_palacios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">tres_palacios</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+<span class="va">tres_palacios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">tres_palacios</span><span class="op">)</span> |&gt;
   <span class="co">## flow must have units, here is is in cfs</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Flow</span>, <span class="st">"ft^3/s"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Flow</span>, <span class="st">"ft^3/s"</span><span class="op">)</span><span class="op">)</span>|&gt;
   <span class="co">## pollutant concentration must have units</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Indicator_Bacteria <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Indicator_Bacteria</span>, <span class="st">"cfu/100mL"</span><span class="op">)</span><span class="op">)</span>
 
@@ -201,9 +199,11 @@
          label_nudge_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotation_logticks.html" class="external-link">annotation_logticks</a></span><span class="op">(</span>sides <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">twriTemplates</span><span class="fu">::</span><span class="fu">theme_TWRI_print</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
-        legend.direction <span class="op">=</span> <span class="st">"vertical"</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
+        legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        legend.direction <span class="op">=</span> <span class="st">"vertical"</span>,
+        panel.grid <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-ldcplot-1.png" width="100%"></p>
 </div>
 <div class="section level3">
@@ -211,7 +211,7 @@
 </h3>
 <p>ldc relies on the units package to facilitate unit conversions and tracking of units across variables. This is handy if we want to transform units on the fly. In the above summary table, median daily flow volume is reported in units of 100mL/day. This isn’t a logical unit to communicate, lets change it to million. gallons/day.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df_sum</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">df_sum</span> |&gt;
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Median_Daily_Flow_Volume <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Median_Daily_Flow_Volume</span>, <span class="st">"1E6gallons/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_sum</span>
 <span class="va">df_sum</span>
 <span class="co">#&gt; # A tibble: 3 x 6</span>
@@ -222,7 +222,7 @@
 <span class="co">#&gt; 3 Low Flows            8.66    0.900      67.1             5.60     14229395256.</span></code></pre></div>
 <p>cfu/day is a really big number. We can convert that to billion cfu/day.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df_sum</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">df_sum</span> |&gt;
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Median_Flow_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Median_Flow_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_sum</span>
 <span class="va">df_sum</span>
 <span class="co">#&gt; # A tibble: 3 x 6</span>
@@ -233,7 +233,7 @@
 <span class="co">#&gt; 3 Low Flows            8.66    0.900      67.1             5.60             14.2</span></code></pre></div>
 <p>If we want to plot these, we also need to convert the df_ldc variables to matching units.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df_ldc</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">df_ldc</span> |&gt;
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Daily_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Daily_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span>,
          Allowable_Daily_Load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">Allowable_Daily_Load</span>, <span class="st">"1E9cfu/day"</span><span class="op">)</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">df_ldc</span></code></pre></div>
 <p>Updated units will carry over to the plot:</p>
@@ -244,9 +244,11 @@
          label_nudge_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotation_logticks.html" class="external-link">annotation_logticks</a></span><span class="op">(</span>sides <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">twriTemplates</span><span class="fu">::</span><span class="fu">theme_TWRI_print</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
-        legend.direction <span class="op">=</span> <span class="st">"vertical"</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span>,
+        legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        legend.direction <span class="op">=</span> <span class="st">"vertical"</span>,
+        panel.grid <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-ldcplot2-1.png" width="100%"></p>
 </div>
 </div>
