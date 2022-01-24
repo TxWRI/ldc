@@ -1,8 +1,5 @@
 test_that("draw_ldc creates expected ggplot objects", {
   skip_on_cran()
-  library(dplyr)
-  library(units)
-  library(ggplot2)
   # Format data
   install_unit("cfu")
   df <- as_tibble(tres_palacios) %>%

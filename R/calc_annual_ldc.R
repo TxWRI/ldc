@@ -79,11 +79,15 @@ calc_annual_ldc <- function(.tbl,
 
   ## get concentration denominator
   C_den <- units(.tbl[[substitute(C)]])$denominator
+  allowable_concentration_den <- units(allowable_concentration)$denominator
 
   ## if length is zero, then it is not a concentration
   if(length(C_den) == 0) {
     stop(paste0(as_name(enquo(C)),
                 " does not have valid units, it is missing a denominator"))
+  }
+  if(length(allowable_concentration_den) == 0) {
+    stop("'allowable_concentration' does not have valid units, it is missing a denominator")
   }
 
   ## Discharge units
@@ -93,7 +97,7 @@ calc_annual_ldc <- function(.tbl,
 
   ## create the flow duration curve
   fdc.tbl <- .tbl %>%
-    as_tibble(.tbl) %>%
+    as_tibble() %>%
     arrange(!! enquo(Q)) %>%
     mutate(
       Year = as.numeric(format(!! enquo(Date), "%Y"))) %>%
