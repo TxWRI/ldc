@@ -10,5 +10,5 @@
 #'   \item{Flow}{Mean Daily Flow in cfs}
 #'   \item{Indicator_Bacteria}{Bacteria concentration measured on the given day in MPN/100mL}
 #'    }
-#' @source USGS NWIS \url{https://waterdata.usgs.gov/nwis} and TCEQ SWQM {https://www.tceq.texas.gov/waterquality/monitoring}
+#' @source USGS NWIS \url{https://waterdata.usgs.gov/nwis} and TCEQ SWQM \url{https://www.tceq.texas.gov/waterquality/monitoring}
 "tres_palacios"

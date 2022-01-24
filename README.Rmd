@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 	collapse = TRUE,
 	comment = "#>",
 	dev = "ragg_png",
-	dpi = 180,
+	dpi = 300,
 	out.width = "100%"
 )
 ```
@@ -56,8 +56,6 @@ library(ldc)
 library(dplyr)
 library(units)
 library(ggplot2)
-## optional packages
-library(twriTemplates)
 
 ## this will calculate a ldc for indicator bacteria
 
@@ -67,9 +65,9 @@ library(twriTemplates)
 install_unit("cfu")
 
 ## format the data for use in ldc
-tres_palacios <- as_tibble(tres_palacios) %>%
+tres_palacios <- as_tibble(tres_palacios) |>
   ## flow must have units, here is is in cfs
-  mutate(Flow = set_units(Flow, "ft^3/s")) %>%
+  mutate(Flow = set_units(Flow, "ft^3/s"))|>
   ## pollutant concentration must have units
   mutate(Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
 
@@ -118,9 +116,11 @@ draw_ldc(df_ldc,
          label_nudge_y = log10(1000)) + 
   scale_y_log10() +
   annotation_logticks(sides = "l") +
-  twriTemplates::theme_TWRI_print() +
-  theme(legend.title = element_blank(),
-        legend.direction = "vertical")
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical",
+        panel.grid = element_blank())
 ```
 
 ### Units
@@ -128,7 +128,7 @@ draw_ldc(df_ldc,
 ldc relies on the units package to facilitate unit conversions and tracking of units across variables. This is handy if we want to transform units on the fly. In the above summary table, median daily flow volume is reported in units of 100mL/day. This isn't a logical unit to communicate, lets change it to million. gallons/day.
 
 ```{r unitconv1}
-df_sum %>%
+df_sum |>
   mutate(Median_Daily_Flow_Volume = set_units(Median_Daily_Flow_Volume, "1E6gallons/day")) -> df_sum
 df_sum
 ```
@@ -136,7 +136,7 @@ df_sum
 cfu/day is a really big number. We can convert that to billion cfu/day.
 
 ```{r unitconv2}
-df_sum %>%
+df_sum |>
   mutate(Median_Flow_Load = set_units(Median_Flow_Load, "1E9cfu/day")) -> df_sum
 df_sum
 ```
@@ -144,7 +144,7 @@ df_sum
 If we want to plot these, we also need to convert the df_ldc variables to matching units.
 
 ```{r unitconv3}
-df_ldc %>%
+df_ldc |>
   mutate(Daily_Load = set_units(Daily_Load, "1E9cfu/day"),
          Allowable_Daily_Load = set_units(Allowable_Daily_Load, "1E9cfu/day")) -> df_ldc
 ```
@@ -158,8 +158,10 @@ draw_ldc(df_ldc,
          label_nudge_y = log10(1000)) + 
   scale_y_log10() +
   annotation_logticks(sides = "l") +
-  twriTemplates::theme_TWRI_print() +
-  theme(legend.title = element_blank(),
-        legend.direction = "vertical")
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical",
+        panel.grid = element_blank())
 ```
 

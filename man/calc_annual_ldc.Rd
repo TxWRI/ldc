@@ -12,6 +12,7 @@ calc_annual_ldc(
   allowable_concentration = NULL,
   breaks = c(1, 0.8, 0.4, 0),
   labels = c("High Flows", "Medium Flows", "Low Flows"),
+  conf_level = 0.9,
   estimator = 6,
   n = 500
 )
@@ -38,14 +39,19 @@ of length of labels + 1. defaults to \code{c(1, 0.8, 0.4, 0)}.}
 
 \item{labels}{labels for the categories specified by breaks.}
 
-\item{estimator}{numeric, one of \code{c(5,6,7,8,9)}. \code{6} is the default
+\item{conf_level}{numeric, confidence level (default is 0.9) of the median
+interval at given exceedance probability.}
+
+\item{estimator}{one of \code{c(5,6,7,8,9,"hd")}. \code{6} is the default
 method correponding to the Weibull plotting position. Further details are
-provided in \code{stats::quantile()}.}
+provided in \code{\link[stats]{quantile}}. \code{"hd"} uses the Harrell-Davis
+Distribution-Free Quantile Estimator (see:
+\code{\link[Hmisc]{hdquantile}}).}
 
 \item{n}{numeric, the length of generated probability points. Larger n may
 result in a slightly smoother curve at a cost of increased processing time.
 The probability points are used to generate the continuous sample quantiles
-types 5 to 9 (see \code{quantile}).}
+types 5 to 9 (see \code{\link[stats]{quantile}}).}
 }
 \value{
 list of two tibbles (Q and C). Includes variables in .tbl and
@@ -55,4 +61,51 @@ list of two tibbles (Q and C). Includes variables in .tbl and
 }
 \description{
 Calculates the median annual ldc with confidence intervals.
+}
+\details{
+The median annual ldc is calculated by computing the flow duration
+  curve for each individual year in the dataset. Exceedance probabilities are
+  calculated from the descending order of Daily Flows. By default, the
+  Weibull plotting position is used: \deqn{p = P(Q > q_i) =  \frac{i}{n+1}}
+  where \eqn{q_i, i = 1, 2, ... n}, is the i-th sorted streamflow value.
+
+  The median streamflow +/- chosen confidence interval is calculated at each
+  exceedance probability. The load duration curve is calculated by
+  multiplying the median streamflow by the allowable concentration and
+  appropriate conversions.
+}
+\examples{
+# Basic example using built in Tres Palacios data
+library(dplyr)
+library(units)
+# Format data
+install_unit("cfu")
+df <- as_tibble(tres_palacios) \%>\%
+  ## filter data so this run quicker
+  filter(!is.na(Indicator_Bacteria)) \%>\%
+  ## flow must have units, here is is in cfs
+  mutate(Flow = set_units(Flow, "ft^3/s")) \%>\%
+  ## pollutant concentration must have units
+  mutate(Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
+# Calculate LDC
+
+## specify the allowable concentration
+allowable_concentration <- 126
+## set the units
+units(allowable_concentration) <- "cfu/100mL"
+df_ldc <- calc_annual_ldc(df,
+                   Q = Flow,
+                   C = Indicator_Bacteria,
+                   allowable_concentration = allowable_concentration,
+                   estimator = 5,
+                   n = 1000)
+df_ldc$Q
+
+## cleanup
+remove_unit("cfu")
+}
+\references{
+Vogel, Richard M., and Neil M. Fennessey. "Flow-duration curves.
+  I: New interpretation and confidence intervals." Journal of Water Resources
+  Planning and Management 120, no. 4 (1994): 485-504. \doi{10.1061/(ASCE)0733-9496(1994)120:4(485)}
 }

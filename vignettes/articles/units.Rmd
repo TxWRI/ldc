@@ -13,5 +13,104 @@ knitr::opts_chunk$set(
 library(ldc)
 ```
 
+# Introduction to Units
 
-**Placeholder**
+ldc relies on the [units](https://r-quantities.github.io/units/index.html) package to facilitate unit conversions and tracking of units across variables. This is handy if we want to transform units on the fly. I suggest briefly reviewing the [units package documentation](https://r-quantities.github.io/units/articles/measurement_units_in_R.html#handling-data-with-units-in-r-the-units-package) to become familiar with how units objects are handled. A brief example is shown below:
+
+```{r}
+library(units)
+## generate random data
+x <- rlnorm(n = 100, meanlog = log(100), sdlog = log(10))
+
+## attach units, cubic feet per second
+x <- set_units(x, "ft^3/s")
+x
+```
+
+x is a object of type units which can be used with most R expressions:
+
+```{r}
+x * 86400
+```
+
+The units can be converted:
+
+```{r}
+## convert to cubic feet per day
+x <- set_units(x, "ft^3/d")
+x
+```
+
+Units can be plotted:
+
+```{r unitshistbase}
+## convert to million gallons per day
+x <- set_units(x, "1E6gallons/day")
+hist(x)
+```
+
+The [ggforce](https://ggforce.data-imaginist.com/) package is required to handle plotting units in ggplot2:
+
+```{r}
+library(ggplot2)
+library(ggforce)
+
+ggplot(data.frame(x)) +
+  geom_histogram(aes(x), binwidth = 100) 
+```
+
+# Units with ldc
+
+Stream loads are measured in pounds or kilograms per day for pollutants such as nutrients and sediment. Fecal bacteria loads are typically in colony forming units (cfu) or most probable number (MPN) per day. The included `tres_palacios` dataset includes bacteria and flow measurements from the Tres Palacios river. Bacteria measurements will need to units in "cfu/100mL" and flow should be in "cubic feet per second."
+
+```{r}
+library(dplyr)
+
+## create a cfu unit. it is a simple count, so we just add it as an arbitrary unit.
+install_unit("cfu")
+
+## format the data for use in ldc
+tres_palacios <- as_tibble(tres_palacios) |>
+  ## flow must have units, here is is in cfs
+  mutate(Flow = set_units(Flow, "ft^3/s"))|>
+  ## pollutant concentration must have units
+  mutate(Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
+tres_palacios
+```
+
+The tibble above shows the correct units in each column. What if we want to use metric units for flow?
+
+```{r}
+tres_palacios <- tres_palacios |>
+  mutate(Flow = set_units(Flow, "m^3/s"))
+tres_palacios
+```
+
+Now we can calculate the flow and load exceedance probabilities using `calc_ldc()`. Q and C arguments must have units attached and C must be a concentration unit (mass or counts divided by volume).
+
+```{r calcldc}
+
+## specify the allowable concentration
+allowable_concentration <- 126
+## set the units
+units(allowable_concentration) <- "cfu/100mL"
+
+## calculate the exceedance probabilities along with
+## allowable pollutant loads and measured pollutant loads
+## at given probabilities
+df_ldc <- calc_ldc(tres_palacios, 
+                   Q = Flow, 
+                   C = Indicator_Bacteria, 
+                   allowable_concentration = allowable_concentration)
+
+df_ldc
+```
+
+Now we have the percent exceedance for daily flow, flow volume, and allowable daily loads. The daily flow volume and daily load volume are huge numbers, so it might make sense to convert those units.
+
+```{r}
+df_ldc |>
+  mutate(Daily_Flow_Volume = set_units(Daily_Flow_Volume, "m^3/day"),
+         Allowable_Daily_Load = set_units(Allowable_Daily_Load, "1E9cfu/day"))
+```
+

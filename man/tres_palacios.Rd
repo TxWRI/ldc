@@ -14,7 +14,7 @@ A data frame with 7671 rows and 4 variables:
    }
 }
 \source{
-USGS NWIS \url{https://waterdata.usgs.gov/nwis} and TCEQ SWQM {https://www.tceq.texas.gov/waterquality/monitoring}
+USGS NWIS \url{https://waterdata.usgs.gov/nwis} and TCEQ SWQM \url{https://www.tceq.texas.gov/waterquality/monitoring}
 }
 \usage{
 tres_palacios

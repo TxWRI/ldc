@@ -53,8 +53,6 @@ library(ldc)
 library(dplyr)
 library(units)
 library(ggplot2)
-## optional packages
-library(twriTemplates)
 
 ## this will calculate a ldc for indicator bacteria
 
@@ -64,9 +62,9 @@ library(twriTemplates)
 install_unit("cfu")
 
 ## format the data for use in ldc
-tres_palacios <- as_tibble(tres_palacios) %>%
+tres_palacios <- as_tibble(tres_palacios) |>
   ## flow must have units, here is is in cfs
-  mutate(Flow = set_units(Flow, "ft^3/s")) %>%
+  mutate(Flow = set_units(Flow, "ft^3/s"))|>
   ## pollutant concentration must have units
   mutate(Indicator_Bacteria = set_units(Indicator_Bacteria, "cfu/100mL"))
 
@@ -148,9 +146,11 @@ draw_ldc(df_ldc,
          label_nudge_y = log10(1000)) + 
   scale_y_log10() +
   annotation_logticks(sides = "l") +
-  twriTemplates::theme_TWRI_print() +
-  theme(legend.title = element_blank(),
-        legend.direction = "vertical")
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical",
+        panel.grid = element_blank())
 ```
 
 <img src="man/figures/README-ldcplot-1.png" width="100%" />
@@ -164,7 +164,7 @@ flow volume is reported in units of 100mL/day. This isn’t a logical unit
 to communicate, lets change it to million. gallons/day.
 
 ``` r
-df_sum %>%
+df_sum |>
   mutate(Median_Daily_Flow_Volume = set_units(Median_Daily_Flow_Volume, "1E6gallons/day")) -> df_sum
 df_sum
 #> # A tibble: 3 x 6
@@ -178,7 +178,7 @@ df_sum
 cfu/day is a really big number. We can convert that to billion cfu/day.
 
 ``` r
-df_sum %>%
+df_sum |>
   mutate(Median_Flow_Load = set_units(Median_Flow_Load, "1E9cfu/day")) -> df_sum
 df_sum
 #> # A tibble: 3 x 6
@@ -193,7 +193,7 @@ If we want to plot these, we also need to convert the df\_ldc variables
 to matching units.
 
 ``` r
-df_ldc %>%
+df_ldc |>
   mutate(Daily_Load = set_units(Daily_Load, "1E9cfu/day"),
          Allowable_Daily_Load = set_units(Allowable_Daily_Load, "1E9cfu/day")) -> df_ldc
 ```
@@ -207,9 +207,11 @@ draw_ldc(df_ldc,
          label_nudge_y = log10(1000)) + 
   scale_y_log10() +
   annotation_logticks(sides = "l") +
-  twriTemplates::theme_TWRI_print() +
-  theme(legend.title = element_blank(),
-        legend.direction = "vertical")
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical",
+        panel.grid = element_blank())
 ```
 
 <img src="man/figures/README-ldcplot2-1.png" width="100%" />
