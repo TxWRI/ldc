@@ -1,8 +1,6 @@
 test_that("summ_ldc outputs and errors", {
 
   ## test that returns a tibble with 6 columns
-  library(dplyr)
-  library(units)
   install_unit("cfu")
   df <- as_tibble(tres_palacios) %>%
           filter(!is.na(Indicator_Bacteria)) %>%

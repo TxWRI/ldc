@@ -1,8 +1,5 @@
 test_that("calc_ldc outputs and errors", {
 
-  library(dplyr)
-  library(units)
-
   install_unit("cfu")
   df <- tres_palacios %>%
     filter(!is.na(Indicator_Bacteria)) %>%
