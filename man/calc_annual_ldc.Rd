@@ -96,6 +96,7 @@ units(allowable_concentration) <- "cfu/100mL"
 df_ldc <- calc_annual_ldc(df,
                    Q = Flow,
                    C = Indicator_Bacteria,
+                   Date = Date,
                    allowable_concentration = allowable_concentration,
                    estimator = 5,
                    n = 1000)
