@@ -73,6 +73,7 @@
 #' df_ldc <- calc_annual_ldc(df,
 #'                    Q = Flow,
 #'                    C = Indicator_Bacteria,
+#'                    Date = Date,
 #'                    allowable_concentration = allowable_concentration,
 #'                    estimator = 5,
 #'                    n = 1000)
@@ -100,6 +101,15 @@ calc_annual_ldc <- function(.tbl,
 
   if(is.null(substitute(C))) {
     stop(paste0("Please specify a col 'C' from '", as_name(enquo(.tbl)), "'"))
+  }
+
+  if(is.null(substitute(Date))) {
+    stop(paste0("Please specify a col 'Date' from '", as_name(enquo(.tbl)), "'"))
+  }
+
+  if(class(.tbl[[substitute(Date)]]) != "Date") {
+    stop(paste0(as_name(enquo(Date)),
+                " must be class 'Date'"))
   }
 
   if(is.null(allowable_concentration)) {

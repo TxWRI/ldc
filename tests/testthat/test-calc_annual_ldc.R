@@ -28,22 +28,38 @@ test_that("calc_annual returns expected output", {
 
   ## test that returns an error if arguments are not correct type
   testthat::expect_error(calc_annual_ldc(df,
-                                  Q = NULL,
-                                  C = Indicator_Bacteria,
-                                  allowable_concentration = allowable_concentration))
+                                         Q = NULL,
+                                         C = Indicator_Bacteria,
+                                         Date = Date,
+                                         allowable_concentration = allowable_concentration))
   testthat::expect_error(calc_annual_ldc(df,
-                                  Q = Flow,
-                                  C = NULL,
-                                  allowable_concentration = allowable_concentration))
+                                         Q = Flow,
+                                         C = NULL,
+                                         Date = Date,
+                                         allowable_concentration = allowable_concentration))
   testthat::expect_error(calc_annual_ldc(df,
-                                  Q = Flow,
-                                  C = Indicator_Bacteria,
-                                  allowable_concentration = NULL))
+                                         Q = Flow,
+                                         C = Indicator_Bacteria,
+                                         Date = NULL,
+                                         allowable_concentration = allowable_concentration))
   testthat::expect_error(calc_annual_ldc(df,
-                                  Q = Flow,
-                                  C = Indicator_Bacteria,
-                                  allowable_concentration = allowable_concentration,
-                                  estimator = 1))
+                                         Q = Flow,
+                                         C = Indicator_Bacteria,
+                                         Date = Date,
+                                         allowable_concentration = NULL))
+  testthat::expect_error(calc_annual_ldc(df,
+                                         Q = Flow,
+                                         C = Indicator_Bacteria,
+                                         Date = Date,
+                                         allowable_concentration = allowable_concentration,
+                                         estimator = 1))
+  ## Check that date is correct class
+  df <- df %>% mutate(Date = as.character(Date))
+  testthat::expect_error(calc_annual_ldc(df,
+                                         Q = Flow,
+                                         C = Indicator_Bacteria,
+                                         Date = Date,
+                                         allowable_concentration = allowable_concentration))
 
   ## if units is not a concentration, return an error
   allowable_concentration <- 126
