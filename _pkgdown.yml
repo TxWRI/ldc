@@ -1,6 +1,12 @@
 url: https://txwri.github.io/ldc/
 template:
-  params:
-    bootswatch: yeti
+  package: twriTemplates
+  bootstrap: 5
+
+navbar:
+  type: dark
+  bg: dark
+  structure:
+    right: [search, github]
 repo:
   branch: gh-pages

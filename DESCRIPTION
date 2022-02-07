@@ -28,7 +28,8 @@ Imports:
     purrr,
     rlang,
     units
-URL: https://github.com/TxWRI/ldc
+URL: https://github.com/TxWRI/ldc,
+    https://txwri.github.io/ldc/
 BugReports: https://github.com/TxWRI/ldc/issues
 Suggests: 
     rmarkdown,
@@ -38,3 +39,4 @@ Suggests:
     covr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/Needs/website: TxWRI/twriTemplates
