@@ -4,89 +4,79 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="ldc">
 <title>Why Units • ldc</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_EB%20Garamond-0.4.0/font.css" rel="stylesheet">
+<link href="../deps/_JetBrains%20Mono-0.4.0/font.css" rel="stylesheet">
+<link href="../deps/_Oswald-0.4.0/font.css" rel="stylesheet">
+<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Why Units">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Why Units">
 <meta property="og:description" content="ldc">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">ldc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-dark"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">ldc</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Reference</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/Introduction.html">Introduction to ldc</a>
-    </li>
-    <li>
-      <a href="../articles/exceedance.html">Quantile Estimation Procedures</a>
-    </li>
-    <li>
-      <a href="../articles/units.html">Why Units</a>
-    </li>
-  </ul>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/TxWRI/ldc/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-</div>
-<!--/.nav-collapse -->
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Introduction.html">Introduction to ldc</a>
+    <a class="dropdown-item" href="../articles/exceedance.html">Quantile Estimation Procedures</a>
+    <a class="dropdown-item" href="../articles/units.html">Why Units</a>
   </div>
-<!--/.container -->
+</li>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/TxWRI/ldc/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.navbar -->
 
-      
+    
+  </div>
+</nav><div class="container template-article">
 
-      </header><script src="units_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Why Units</h1>
+
+
+<script src="units_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>Why Units</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/TxWRI/ldc/blob/gh-pages/vignettes/articles/units.Rmd" class="external-link"><code>vignettes/articles/units.Rmd</code></a></small>
-      <div class="hidden name"><code>units.Rmd</code></div>
-
+      <div class="d-none name"><code>units.Rmd</code></div>
     </div>
 
     
@@ -107,76 +97,76 @@
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"ft^3/s"</span><span class="op">)</span>
 <span class="va">x</span>
 <span class="co">#&gt; Units: [ft^3/s]</span>
-<span class="co">#&gt;   [1]   19.9101262   85.3201035    4.6322935   57.5754908 1882.6949699</span>
-<span class="co">#&gt;   [6]  299.6057510    4.7218880  444.6182161    4.3605167  296.7863618</span>
-<span class="co">#&gt;  [11] 3452.4705500   24.6807607  111.5494519  120.8911970   53.3408842</span>
-<span class="co">#&gt;  [16] 4381.2494822   93.2068149    1.4081166    0.7166182    9.2366291</span>
-<span class="co">#&gt;  [21] 2820.8319518  487.6546226 3405.6609165  202.5687541  128.5898372</span>
-<span class="co">#&gt;  [26]  698.1518746    3.8207011  204.4990954 2327.7589887 2308.9841968</span>
-<span class="co">#&gt;  [31]  875.5957060   54.5485540 1477.9212049    6.1653877  127.4194866</span>
-<span class="co">#&gt;  [36]  219.7361209    2.3708132   56.3001511   29.8764930    1.2420633</span>
-<span class="co">#&gt;  [41]  158.4977862   42.8425227   21.9556797  122.4595398 1681.5536891</span>
-<span class="co">#&gt;  [46]  271.1072598  647.4798378  356.1408216   93.7624745 1714.2261222</span>
-<span class="co">#&gt;  [51]   12.1269639  651.1800815 2398.2598904    4.0805299   72.3288915</span>
-<span class="co">#&gt;  [56]    0.4068227   51.9773611   57.3494916   13.9539869  331.4525510</span>
-<span class="co">#&gt;  [61]   42.0752217   37.0917901  112.4604581   17.8290961   91.3535180</span>
-<span class="co">#&gt;  [66] 3089.9904287  628.1115498   77.8363146 1228.1766412   64.6209464</span>
-<span class="co">#&gt;  [71]   68.8879541  405.7639302 1762.9131012    0.1488861 1176.9827200</span>
-<span class="co">#&gt;  [76]    1.2459762  118.2232335 3062.0383455  416.2057011    5.5853330</span>
-<span class="co">#&gt;  [81]   90.6454080    2.1725603  175.3547413  189.5831028   58.3820797</span>
-<span class="co">#&gt;  [86]   15.9217423   14.0204886   33.5836504  527.1010733 2620.0361791</span>
-<span class="co">#&gt;  [91]  148.4187011   15.5522542   67.3575265   17.6289640    8.1189989</span>
-<span class="co">#&gt;  [96]   25.3786225    5.3761203  313.3404179  360.9288547   52.9708575</span></code></pre></div>
+<span class="co">#&gt;   [1] 3.305217e+03 2.237243e+01 6.843526e+01 5.130397e-01 8.465099e+02</span>
+<span class="co">#&gt;   [6] 3.261493e+01 4.209772e+01 1.619673e+01 2.472124e+01 8.180078e+02</span>
+<span class="co">#&gt;  [11] 5.910870e+03 1.002994e+01 7.187791e+00 5.559155e+02 2.669817e+01</span>
+<span class="co">#&gt;  [16] 7.557542e+01 1.738401e+01 2.705508e+01 4.896507e+00 1.303612e+03</span>
+<span class="co">#&gt;  [21] 1.439782e+01 3.661344e+01 5.021760e+03 1.647707e+02 2.560844e+03</span>
+<span class="co">#&gt;  [26] 7.364910e-01 6.789498e+02 1.184617e+01 7.315961e+01 1.384772e+01</span>
+<span class="co">#&gt;  [31] 7.428468e+02 7.576590e+02 1.375925e+02 5.815625e+00 4.023443e+01</span>
+<span class="co">#&gt;  [36] 2.602308e+01 3.559056e+00 2.981858e+04 7.992568e+01 5.448878e+00</span>
+<span class="co">#&gt;  [41] 5.757906e+02 2.459403e+00 1.312775e+03 6.292475e+00 7.633091e+00</span>
+<span class="co">#&gt;  [46] 3.772260e+02 1.311790e+01 4.947215e+02 1.808063e+02 2.243639e+02</span>
+<span class="co">#&gt;  [51] 4.623318e+02 1.027519e+02 2.078196e+02 6.443158e+00 3.172421e+02</span>
+<span class="co">#&gt;  [56] 1.887825e+00 1.548666e+02 3.073110e+01 1.224608e+00 1.333124e+01</span>
+<span class="co">#&gt;  [61] 7.415647e+01 9.282686e+01 9.816047e+02 5.311807e+02 9.999362e+03</span>
+<span class="co">#&gt;  [66] 7.673251e+01 1.993032e+04 3.037631e+02 4.225274e-01 8.347452e+01</span>
+<span class="co">#&gt;  [71] 6.504620e+02 1.784513e+03 2.930827e+02 2.668672e+03 8.941402e+00</span>
+<span class="co">#&gt;  [76] 1.019004e+02 4.301757e+00 1.678122e+02 1.166100e+01 2.072369e+01</span>
+<span class="co">#&gt;  [81] 3.715639e+01 1.617803e+02 1.397819e+03 5.458505e+03 3.031891e+02</span>
+<span class="co">#&gt;  [86] 2.377440e+01 1.786722e+01 2.393758e+01 1.984455e+01 7.954231e+02</span>
+<span class="co">#&gt;  [91] 1.380240e+02 3.489321e+03 4.282422e+02 3.968873e+01 7.352239e+01</span>
+<span class="co">#&gt;  [96] 3.573688e+01 5.207961e+01 7.638658e+01 2.172734e+02 1.113797e+01</span></code></pre></div>
 <p>x is a object of type units which can be used with most R expressions:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">*</span> <span class="fl">86400</span>
 <span class="co">#&gt; Units: [ft^3/s]</span>
-<span class="co">#&gt;   [1]   1720234.90   7371656.94    400230.15   4974522.40 162664845.40</span>
-<span class="co">#&gt;   [6]  25885936.89    407971.12  38415013.87    376748.64  25642341.66</span>
-<span class="co">#&gt;  [11] 298293455.52   2132417.73   9637872.64  10444999.42   4608652.39</span>
-<span class="co">#&gt;  [16] 378539955.26   8053068.81    121661.27     61915.81    798044.76</span>
-<span class="co">#&gt;  [21] 243719880.64  42133359.39 294249103.19  17501940.36  11110161.93</span>
-<span class="co">#&gt;  [26]  60320321.97    330108.58  17668721.84 201118376.62 199496234.61</span>
-<span class="co">#&gt;  [31]  75651469.00   4712995.07 127692392.10    532689.50  11009043.64</span>
-<span class="co">#&gt;  [36]  18985200.84    204838.26   4864333.06   2581329.00    107314.27</span>
-<span class="co">#&gt;  [41]  13694208.72   3701593.96   1896970.72  10580504.24 145286238.74</span>
-<span class="co">#&gt;  [46]  23423667.25  55942257.99  30770566.99   8101077.80 148109136.96</span>
-<span class="co">#&gt;  [51]   1047769.68  56261959.04 207209654.53    352557.78   6249216.23</span>
-<span class="co">#&gt;  [56]     35149.49   4490844.00   4954996.07   1205624.46  28637500.40</span>
-<span class="co">#&gt;  [61]   3635299.16   3204730.66   9716583.58   1540433.91   7892943.96</span>
-<span class="co">#&gt;  [66] 266975173.04  54268837.90   6725057.58 106114461.80   5583249.77</span>
-<span class="co">#&gt;  [71]   5951919.24  35058003.57 152315691.94     12863.76 101691307.01</span>
-<span class="co">#&gt;  [76]    107652.34  10214487.38 264560113.05  35960172.58    482572.77</span>
-<span class="co">#&gt;  [81]   7831763.25    187709.21  15150649.65  16379980.08   5044211.68</span>
-<span class="co">#&gt;  [86]   1375638.53   1211370.21   2901627.40  45541532.74 226371125.87</span>
-<span class="co">#&gt;  [91]  12823375.77   1343714.76   5819690.29   1523142.49    701481.50</span>
-<span class="co">#&gt;  [96]   2192712.98    464496.80  27072612.10  31184253.04   4576682.08</span></code></pre></div>
+<span class="co">#&gt;   [1] 2.855708e+08 1.932978e+06 5.912806e+06 4.432663e+04 7.313846e+07</span>
+<span class="co">#&gt;   [6] 2.817930e+06 3.637243e+06 1.399398e+06 2.135916e+06 7.067587e+07</span>
+<span class="co">#&gt;  [11] 5.106992e+08 8.665870e+05 6.210251e+05 4.803110e+07 2.306722e+06</span>
+<span class="co">#&gt;  [16] 6.529716e+06 1.501978e+06 2.337559e+06 4.230582e+05 1.126321e+08</span>
+<span class="co">#&gt;  [21] 1.243972e+06 3.163401e+06 4.338801e+08 1.423619e+07 2.212569e+08</span>
+<span class="co">#&gt;  [26] 6.363282e+04 5.866127e+07 1.023509e+06 6.320990e+06 1.196443e+06</span>
+<span class="co">#&gt;  [31] 6.418197e+07 6.546174e+07 1.188799e+07 5.024700e+05 3.476255e+06</span>
+<span class="co">#&gt;  [36] 2.248394e+06 3.075024e+05 2.576326e+09 6.905579e+06 4.707831e+05</span>
+<span class="co">#&gt;  [41] 4.974831e+07 2.124924e+05 1.134238e+08 5.436698e+05 6.594990e+05</span>
+<span class="co">#&gt;  [46] 3.259233e+07 1.133386e+06 4.274394e+07 1.562166e+07 1.938504e+07</span>
+<span class="co">#&gt;  [51] 3.994547e+07 8.877762e+06 1.795562e+07 5.566888e+05 2.740972e+07</span>
+<span class="co">#&gt;  [56] 1.631081e+05 1.338047e+07 2.655167e+06 1.058061e+05 1.151819e+06</span>
+<span class="co">#&gt;  [61] 6.407119e+06 8.020241e+06 8.481065e+07 4.589401e+07 8.639449e+08</span>
+<span class="co">#&gt;  [66] 6.629689e+06 1.721980e+09 2.624513e+07 3.650637e+04 7.212198e+06</span>
+<span class="co">#&gt;  [71] 5.619992e+07 1.541820e+08 2.532235e+07 2.305732e+08 7.725371e+05</span>
+<span class="co">#&gt;  [76] 8.804192e+06 3.716718e+05 1.449897e+07 1.007511e+06 1.790527e+06</span>
+<span class="co">#&gt;  [81] 3.210312e+06 1.397782e+07 1.207715e+08 4.716148e+08 2.619554e+07</span>
+<span class="co">#&gt;  [86] 2.054108e+06 1.543728e+06 2.068207e+06 1.714569e+06 6.872456e+07</span>
+<span class="co">#&gt;  [91] 1.192528e+07 3.014773e+08 3.700012e+07 3.429106e+06 6.352335e+06</span>
+<span class="co">#&gt;  [96] 3.087667e+06 4.499678e+06 6.599801e+06 1.877242e+07 9.623207e+05</span></code></pre></div>
 <p>The units can be converted:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## convert to cubic feet per day</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"ft^3/d"</span><span class="op">)</span>
 <span class="va">x</span>
 <span class="co">#&gt; Units: [ft^3/d]</span>
-<span class="co">#&gt;   [1]   1720234.90   7371656.94    400230.15   4974522.40 162664845.40</span>
-<span class="co">#&gt;   [6]  25885936.89    407971.12  38415013.87    376748.64  25642341.66</span>
-<span class="co">#&gt;  [11] 298293455.52   2132417.73   9637872.64  10444999.42   4608652.39</span>
-<span class="co">#&gt;  [16] 378539955.26   8053068.81    121661.27     61915.81    798044.76</span>
-<span class="co">#&gt;  [21] 243719880.64  42133359.39 294249103.19  17501940.36  11110161.93</span>
-<span class="co">#&gt;  [26]  60320321.97    330108.58  17668721.84 201118376.62 199496234.61</span>
-<span class="co">#&gt;  [31]  75651469.00   4712995.07 127692392.10    532689.50  11009043.64</span>
-<span class="co">#&gt;  [36]  18985200.84    204838.26   4864333.06   2581329.00    107314.27</span>
-<span class="co">#&gt;  [41]  13694208.72   3701593.96   1896970.72  10580504.24 145286238.74</span>
-<span class="co">#&gt;  [46]  23423667.25  55942257.99  30770566.99   8101077.80 148109136.96</span>
-<span class="co">#&gt;  [51]   1047769.68  56261959.04 207209654.53    352557.78   6249216.23</span>
-<span class="co">#&gt;  [56]     35149.49   4490844.00   4954996.07   1205624.46  28637500.40</span>
-<span class="co">#&gt;  [61]   3635299.16   3204730.66   9716583.58   1540433.91   7892943.96</span>
-<span class="co">#&gt;  [66] 266975173.04  54268837.90   6725057.58 106114461.80   5583249.77</span>
-<span class="co">#&gt;  [71]   5951919.24  35058003.57 152315691.94     12863.76 101691307.01</span>
-<span class="co">#&gt;  [76]    107652.34  10214487.38 264560113.05  35960172.58    482572.77</span>
-<span class="co">#&gt;  [81]   7831763.25    187709.21  15150649.65  16379980.08   5044211.68</span>
-<span class="co">#&gt;  [86]   1375638.53   1211370.21   2901627.40  45541532.74 226371125.87</span>
-<span class="co">#&gt;  [91]  12823375.77   1343714.76   5819690.29   1523142.49    701481.50</span>
-<span class="co">#&gt;  [96]   2192712.98    464496.80  27072612.10  31184253.04   4576682.08</span></code></pre></div>
+<span class="co">#&gt;   [1] 2.855708e+08 1.932978e+06 5.912806e+06 4.432663e+04 7.313846e+07</span>
+<span class="co">#&gt;   [6] 2.817930e+06 3.637243e+06 1.399398e+06 2.135916e+06 7.067587e+07</span>
+<span class="co">#&gt;  [11] 5.106992e+08 8.665870e+05 6.210251e+05 4.803110e+07 2.306722e+06</span>
+<span class="co">#&gt;  [16] 6.529716e+06 1.501978e+06 2.337559e+06 4.230582e+05 1.126321e+08</span>
+<span class="co">#&gt;  [21] 1.243972e+06 3.163401e+06 4.338801e+08 1.423619e+07 2.212569e+08</span>
+<span class="co">#&gt;  [26] 6.363282e+04 5.866127e+07 1.023509e+06 6.320990e+06 1.196443e+06</span>
+<span class="co">#&gt;  [31] 6.418197e+07 6.546174e+07 1.188799e+07 5.024700e+05 3.476255e+06</span>
+<span class="co">#&gt;  [36] 2.248394e+06 3.075024e+05 2.576326e+09 6.905579e+06 4.707831e+05</span>
+<span class="co">#&gt;  [41] 4.974831e+07 2.124924e+05 1.134238e+08 5.436698e+05 6.594990e+05</span>
+<span class="co">#&gt;  [46] 3.259233e+07 1.133386e+06 4.274394e+07 1.562166e+07 1.938504e+07</span>
+<span class="co">#&gt;  [51] 3.994547e+07 8.877762e+06 1.795562e+07 5.566888e+05 2.740972e+07</span>
+<span class="co">#&gt;  [56] 1.631081e+05 1.338047e+07 2.655167e+06 1.058061e+05 1.151819e+06</span>
+<span class="co">#&gt;  [61] 6.407119e+06 8.020241e+06 8.481065e+07 4.589401e+07 8.639449e+08</span>
+<span class="co">#&gt;  [66] 6.629689e+06 1.721980e+09 2.624513e+07 3.650637e+04 7.212198e+06</span>
+<span class="co">#&gt;  [71] 5.619992e+07 1.541820e+08 2.532235e+07 2.305732e+08 7.725371e+05</span>
+<span class="co">#&gt;  [76] 8.804192e+06 3.716718e+05 1.449897e+07 1.007511e+06 1.790527e+06</span>
+<span class="co">#&gt;  [81] 3.210312e+06 1.397782e+07 1.207715e+08 4.716148e+08 2.619554e+07</span>
+<span class="co">#&gt;  [86] 2.054108e+06 1.543728e+06 2.068207e+06 1.714569e+06 6.872456e+07</span>
+<span class="co">#&gt;  [91] 1.192528e+07 3.014773e+08 3.700012e+07 3.429106e+06 6.352335e+06</span>
+<span class="co">#&gt;  [96] 3.087667e+06 4.499678e+06 6.599801e+06 1.877242e+07 9.623207e+05</span></code></pre></div>
 <p>Units can be plotted:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## convert to million gallons per day</span>
@@ -187,6 +177,9 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggforce.data-imaginist.com" class="external-link">ggforce</a></span><span class="op">)</span>
+<span class="co">#&gt; Registered S3 method overwritten by 'ggforce':</span>
+<span class="co">#&gt;   method           from </span>
+<span class="co">#&gt;   scale_type.units units</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, binwidth <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> </code></pre></div>
@@ -303,33 +296,26 @@
 <span class="co">#&gt; <span style="color: #949494;"># … with 7,661 more rows, and 3 more variables:</span></span>
 <span class="co">#&gt; <span style="color: #949494;">#   Allowable_Daily_Load [1E9cfu/d], P_Exceedance &lt;dbl&gt;, Flow_Category &lt;fct&gt;</span></span></code></pre></div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Michael Schramm.</p>
+<p>Developed by <a href="https://github.com/mps9506" class="external-link">Michael Schramm</a>.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
 <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 
