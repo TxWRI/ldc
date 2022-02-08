@@ -13,6 +13,7 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 
 [![Codecov test
 coverage](https://codecov.io/gh/TxWRI/ldc/branch/main/graph/badge.svg)](https://app.codecov.io/gh/TxWRI/ldc?branch=main)
+
 <!-- badges: end -->
 
 ldc provides automated and fairly opinionated functions for generating
@@ -189,7 +190,7 @@ df_sum
 #> 3 Low Flows            8.66    0.900      67.1             5.60             14.2
 ```
 
-If we want to plot these, we also need to convert the df\_ldc variables
+If we want to plot these, we also need to convert the df_ldc variables
 to matching units.
 
 ``` r
